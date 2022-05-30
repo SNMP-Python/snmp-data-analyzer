@@ -1,4 +1,6 @@
 [MISCELLANEOUS]
 # List of note tags to take in consideration, separated by a comma.
 notes=FIXME,TODO
-ignore-paths=test
+ignore-paths=test/venv
+# Nothing to worry about, they're warnings about documentation (classes, methods, etc)
+disable=C0112,C0115,R0903,C0114,C0116
