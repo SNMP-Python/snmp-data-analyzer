@@ -1,2 +1,7 @@
 python3-netsnmp
 easysnmp
+pylint
+black==22.3.0
+pre-commit
+pytest
+isort
