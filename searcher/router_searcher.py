@@ -5,7 +5,6 @@ from searcher.router_primitives import RouterPrimitives
 
 
 class RouterSearcher(ABC):
-
     @abstractmethod
     def get_router_primitives(self) -> List[RouterPrimitives]:
         pass

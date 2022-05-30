@@ -5,7 +5,6 @@ from common.router import Router
 
 
 class RouterParser(ABC):
-
     @abstractmethod
     def get_routers(self) -> List[Router]:
         pass

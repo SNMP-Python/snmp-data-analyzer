@@ -1,0 +1,2 @@
+class EmptyInterfaceNameException(Exception):
+    pass

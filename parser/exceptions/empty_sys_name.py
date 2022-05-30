@@ -1,0 +1,2 @@
+class EmptySysNameException(Exception):
+    pass

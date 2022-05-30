@@ -1,5 +1,6 @@
 python3-netsnmp
 easysnmp
+netaddr
 pylint
 black==22.3.0
 pre-commit

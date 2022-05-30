@@ -1,0 +1,2 @@
+class SpeedValueException(Exception):
+    pass
