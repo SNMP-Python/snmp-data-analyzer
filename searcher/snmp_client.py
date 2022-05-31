@@ -5,6 +5,7 @@ from typing import List
 from easysnmp import EasySNMPTimeoutError, Session, SNMPVariable
 
 from searcher.client import Client
+from searcher.exceptions.next_hop_not_found_exception import NextHopNotFoundException
 from searcher.exceptions.non_reachable_host import NonReachableHostException
 from searcher.exceptions.ospf_id_not_available import OSPFIdNotAvailableException
 from searcher.primitives.interface_primitives import InterfacePrimitives
@@ -20,10 +21,10 @@ INTERFACE_ADDR_OID = 'RFC1213-MIB::ipAdEntAddr'
 INTERFACE_INDEX_TO_ADDR_OID = 'RFC1213-MIB::ipAdEntIfIndex'
 INTERFACE_MASK_OID = 'RFC1213-MIB::ipAdEntNetMask'
 INTERFACE_DESCR_OID = 'RFC1213-MIB::ifDescr'
-ROUTE_NETWORK_OID = 'RFC1213-MIB::ipRouteDest'
+ROUTE_NETWORK_OID = 'IP-FORWARD-MIB::ipCidrRouteDest'
 ROUTE_MASK_OID = 'RFC1213-MIB::ipRouteMask'
-ROUTE_NEXT_HOP_OID = 'RFC1213-MIB::ipRouteNextHop'
-ROUTE_TYPE_OID = 'RFC1213-MIB::ipRouteType'
+ROUTE_NEXT_HOP_OID = 'IP-FORWARD-MIB::ipCidrRouteNextHop'
+ROUTE_TYPE_OID = 'IP-FORWARD-MIB::ipCidrRouteType'
 OSPF_ID_OID = '.1.3.6.1.2.1.14.1.1'
 IP_ROUTE_TABLE_OID = '1.3.6.1.2.1.4.21'
 RO_COMMUNITY = 'rocom'
@@ -126,10 +127,11 @@ class SNMPClient(Client):
 
     @staticmethod
     def _get_route_from_network(session: Session, network: str) -> RoutePrimitives:
+        mask = SNMPClient._get_route_mask(session, network)
         return RoutePrimitives(
             network=network,
-            mask=SNMPClient._get_route_mask(session, network),
-            next_hop=SNMPClient._get_route_next_hop(session, network),
+            mask=mask,
+            next_hop=SNMPClient._get_route_next_hop(session, network, mask),
             route_type=SNMPClient._get_route_type(session, network),
         )
 
@@ -138,8 +140,11 @@ class SNMPClient(Client):
         return str(session.get(ROUTE_MASK_OID + '.' + network).value)
 
     @staticmethod
-    def _get_route_next_hop(session: Session, network: str) -> str:
-        return str(session.get(ROUTE_NEXT_HOP_OID + '.' + network).value)
+    def _get_route_next_hop(session: Session, network: str, mask: str) -> str:
+        result = session.walk(ROUTE_NEXT_HOP_OID + '.' + network + '.' + mask)
+        if len(result) != 1:
+            raise NextHopNotFoundException()
+        return str(result[0].value)
 
     @staticmethod
     def _get_route_type(session: Session, network: str) -> str:
@@ -147,7 +152,7 @@ class SNMPClient(Client):
 
     @staticmethod
     def _get_ospf_id(session: Session) -> str:
-        result: List[SNMPVariable] = session.walk('.1.3.6.1.2.1.14.1.1')
+        result = session.walk('.1.3.6.1.2.1.14.1.1')
         if len(result) != 1:
             raise OSPFIdNotAvailableException()
         return result[0].value

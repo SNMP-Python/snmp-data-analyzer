@@ -1,0 +1,2 @@
+class NextHopNotFoundException(Exception):
+    pass

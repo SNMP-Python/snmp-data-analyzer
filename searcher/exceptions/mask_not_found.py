@@ -1,0 +1,2 @@
+class MaskNotFoundException(Exception):
+    pass
