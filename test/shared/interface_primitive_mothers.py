@@ -15,8 +15,9 @@ class InterfacePrimitiveMother:
         status: str = STATUS_UP,
         speed: str = "25.2",
         mask: str = "255.255.255.0",
+        int_type: str = "6",
     ) -> InterfacePrimitives:
-        return InterfacePrimitives(interface=name, ip_addr=ip, mask=mask, status=status, speed=speed)
+        return InterfacePrimitives(interface=name, ip_addr=ip, mask=mask, status=status, speed=speed, int_type=int_type)
 
     @staticmethod
     def get_list_of_one_element(
@@ -25,8 +26,9 @@ class InterfacePrimitiveMother:
         status: str = STATUS_UP,
         speed: str = "25.2",
         mask: str = "255.255.255.0",
+        int_type: str = "6",
     ) -> List[InterfacePrimitives]:
-        return [InterfacePrimitiveMother.get(ip, name, status, speed, mask)]
+        return [InterfacePrimitiveMother.get(ip, name, status, speed, mask, int_type)]
 
     @staticmethod
     def get_list_of_n_elements(

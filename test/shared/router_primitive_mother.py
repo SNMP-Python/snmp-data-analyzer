@@ -15,7 +15,7 @@ class RouterPrimitiveMother:
         routing_table: List[RoutePrimitives] = RoutePrimitiveMother.get_list_of_one_route(),
         ospf_id: str = "",
     ) -> RouterPrimitives:
-        return RouterPrimitives(sys_name, interfaces, routing_table, ospf_id=ospf_id)
+        return RouterPrimitives(sys_name, ospf_id, interfaces, routing_table)
 
     @staticmethod
     def get_one_router(

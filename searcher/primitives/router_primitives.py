@@ -11,13 +11,14 @@ class RouterPrimitives:
     def __init__(
         self,
         sys_name: str,
+        ospf_id: str,
         interfaces: List[InterfacePrimitives],
         routing_table: List[RoutePrimitives],
-        ospf_id: str,
-        # pylint: disable W0102
-        neighbors: List[str] = [],
+        # pylint: disable=W0102
+        neighbors: List[str] = [],  # Router ID
     ):
         self.sys_name = sys_name
+        self.ospf_id = ospf_id
         self.interfaces = interfaces
         self.routing_table = routing_table
         self.neighbors = neighbors
