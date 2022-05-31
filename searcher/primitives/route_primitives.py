@@ -9,7 +9,11 @@ class RoutePrimitives:
         if not isinstance(other, RoutePrimitives):
             return NotImplemented
         # pylint: disable=C0301
-        return self.network == other.network and self.mask == other.mask and self.next_hop == other.next_hop and self.route_type == other.route_type
+        return (
+            self.network == other.network
+            and self.mask == other.mask
+            and self.next_hop == other.next_hop
+        )
 
     def __str__(self):
         return self.network + " " + self.mask + " " + self.next_hop + " " + self.route_type

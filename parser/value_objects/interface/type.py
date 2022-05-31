@@ -6,7 +6,7 @@ class InterfaceType(Enum):
     LOOPBACK = 24
 
     @staticmethod
-    def from_string(value: str) -> 'InterfaceType':
+    def from_string(value: str) -> "InterfaceType":
         try:
             int_value = int(value)
             if int_value == InterfaceType.LOOPBACK.value:

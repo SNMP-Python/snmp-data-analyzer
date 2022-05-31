@@ -9,12 +9,12 @@ from parser.value_objects.interface.type import InterfaceType
 class Interface:
     # pylint: disable=R0913
     def __init__(
-            self,
-            network: IPNetwork,
-            name: InterfaceName,
-            speed: SpeedInterface,
-            status: InterfaceStatus,
-            type_interface: InterfaceType
+        self,
+        network: IPNetwork,
+        name: InterfaceName,
+        speed: SpeedInterface,
+        status: InterfaceStatus,
+        type_interface: InterfaceType,
     ):
         self.network = network
         self.name = name

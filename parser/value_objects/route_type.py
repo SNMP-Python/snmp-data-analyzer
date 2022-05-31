@@ -8,7 +8,7 @@ class RouteType(Enum):
     INDIRECT = 4
 
     @staticmethod
-    def from_string(value: str) -> 'RouteType':
+    def from_string(value: str) -> "RouteType":
         try:
             value_int = int(value)
             for route in RouteType:

@@ -1,10 +1,10 @@
 from enum import Enum
 from parser.exceptions.status_value_exception import StatusValueException
 
+
 class InterfaceStatus(Enum):
     UP = 1
     DOWN = 2
-
 
     @staticmethod
     def from_str(value: str) -> "InterfaceStatus":

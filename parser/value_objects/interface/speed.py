@@ -5,6 +5,7 @@ class SpeedInterface:
     """
     Encapsulates the speed of the interface in MBytes/second
     """
+
     FACTOR_DIVIDER = 1_000_000
 
     def __init__(self, value: str):

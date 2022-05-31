@@ -17,7 +17,14 @@ class InterfacePrimitiveMother:
         mask: str = "255.255.255.0",
         int_type: str = "6",
     ) -> InterfacePrimitives:
-        return InterfacePrimitives(interface=name, ip_addr=ip, mask=mask, status=status, speed=speed, int_type=int_type)
+        return InterfacePrimitives(
+            interface=name,
+            ip_addr=ip,
+            mask=mask,
+            status=status,
+            speed=speed,
+            int_type=int_type,
+        )
 
     @staticmethod
     def get_list_of_one_element(
@@ -32,10 +39,16 @@ class InterfacePrimitiveMother:
 
     @staticmethod
     def get_list_of_n_elements(
-        ips_addresses: List[str], id_interface_init: int = 0, mask: str = "255.255.255.0"
+        ips_addresses: List[str],
+        id_interface_init: int = 0,
+        mask: str = "255.255.255.0",
     ) -> List[InterfacePrimitives]:
         result = []
         for ip_addr in ips_addresses:
-            result.append(InterfacePrimitiveMother.get(ip=ip_addr, name=f"eth{id_interface_init}", mask=mask))
+            result.append(
+                InterfacePrimitiveMother.get(
+                    ip=ip_addr, name=f"eth{id_interface_init}", mask=mask
+                )
+            )
             id_interface_init += 1
         return result

@@ -11,8 +11,12 @@ class RouterPrimitiveMother:
     @staticmethod
     def get(
         sys_name: str = "router_1",
-        interfaces: List[InterfacePrimitives] = InterfacePrimitiveMother.get_list_of_one_element(),
-        routing_table: List[RoutePrimitives] = RoutePrimitiveMother.get_list_of_one_route(),
+        interfaces: List[
+            InterfacePrimitives
+        ] = InterfacePrimitiveMother.get_list_of_one_element(),
+        routing_table: List[
+            RoutePrimitives
+        ] = RoutePrimitiveMother.get_list_of_one_route(),
         ospf_id: str = "",
     ) -> RouterPrimitives:
         return RouterPrimitives(sys_name, ospf_id, interfaces, routing_table)
@@ -20,18 +24,29 @@ class RouterPrimitiveMother:
     @staticmethod
     def get_one_router(
         sys_name: str = "router_1",
-        interfaces: List[InterfacePrimitives] = InterfacePrimitiveMother.get_list_of_one_element(),
-        routing_table: List[RoutePrimitives] = RoutePrimitiveMother.get_list_of_one_route(),
+        interfaces: List[
+            InterfacePrimitives
+        ] = InterfacePrimitiveMother.get_list_of_one_element(),
+        routing_table: List[
+            RoutePrimitives
+        ] = RoutePrimitiveMother.get_list_of_one_route(),
         ospf_id: str = "",
     ) -> List[RouterPrimitives]:
         return [
             RouterPrimitiveMother.get(
-                sys_name=sys_name, interfaces=interfaces, routing_table=routing_table, ospf_id=ospf_id
+                sys_name=sys_name,
+                interfaces=interfaces,
+                routing_table=routing_table,
+                ospf_id=ospf_id,
             )
         ]
 
     @staticmethod
     def get_router_with(id_router: int, neighbors: List[str], ospf_id: str):
         return RouterPrimitives(
-            sys_name=f"Router-{id_router}", interfaces=[], routing_table=[], neighbors=neighbors, ospf_id=ospf_id
+            sys_name=f"Router-{id_router}",
+            interfaces=[],
+            routing_table=[],
+            neighbors=neighbors,
+            ospf_id=ospf_id,
         )

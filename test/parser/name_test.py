@@ -12,5 +12,9 @@ def test_empty_sys_name_throws_exception():
 
 
 def test_correct_sys_name_saves_name():
-    sys_name = RouterParserImp(RouterPrimitiveMother.get_one_router(sys_name="pablo-pc")).get_routers()[0].sys_name
+    sys_name = (
+        RouterParserImp(RouterPrimitiveMother.get_one_router(sys_name="pablo-pc"))
+        .get_routers()[0]
+        .sys_name
+    )
     assert sys_name == SysName("pablo-pc")

@@ -37,7 +37,9 @@ class RouterParserImp(RouterParser):
     def _get_interfaces_from(
         interfaces_primitives: List[InterfacePrimitives],
     ) -> List[Interface]:
-        return list(map(RouterParserImp._get_interface_from_primitive, interfaces_primitives))
+        return list(
+            map(RouterParserImp._get_interface_from_primitive, interfaces_primitives)
+        )
 
     @staticmethod
     def _get_routing_table_from(
@@ -58,14 +60,18 @@ class RouterParserImp(RouterParser):
             name=InterfaceName(interface.interface),
             speed=SpeedInterface(interface.speed),
             status=InterfaceStatus.from_str(interface.status),
-            type_interface=InterfaceType.from_string(interface.int_type)
+            type_interface=InterfaceType.from_string(interface.int_type),
         )
 
     @staticmethod
     def _get_routing_table_entry_from_primitive(
         route_primitive: RoutePrimitives,
     ) -> RoutingTableEntry:
-        network = IPParser.get_network_from(route_primitive.network, route_primitive.mask)
+        network = IPParser.get_network_from(
+            route_primitive.network, route_primitive.mask
+        )
         next_hop = IPParser.get_ip_address_from(route_primitive.next_hop)
         route_type = RouteType.from_string(route_primitive.route_type)
-        return RoutingTableEntry(network=network, next_hop=next_hop, route_type=route_type)
+        return RoutingTableEntry(
+            network=network, next_hop=next_hop, route_type=route_type
+        )
