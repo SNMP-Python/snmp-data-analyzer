@@ -16,7 +16,9 @@ class RoutePrimitives:
         )
 
     def __str__(self):
-        return self.network + " " + self.mask + " " + self.next_hop + " " + self.route_type
+        return (
+            self.network + " " + self.mask + " " + self.next_hop + " " + self.route_type
+        )
 
     def __repr__(self):
         return self.__str__()
