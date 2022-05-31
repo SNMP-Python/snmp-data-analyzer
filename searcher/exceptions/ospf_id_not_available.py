@@ -1,0 +1,2 @@
+class OSPFIdNotAvailableException(Exception):
+    pass

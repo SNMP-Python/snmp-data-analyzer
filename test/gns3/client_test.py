@@ -19,17 +19,22 @@ def test_non_reachable_host_throws_non_reachable_host_exception():
 
 def test_reachable_host_returns_name():
     router_primitives = snmp_client.get_router_primitives('10.0.0.2')
-    assert 'R1' == router_primitives.sys_name
+    assert router_primitives.sys_name == 'R1'
 
 
 def test_reachable_host_returns_interfaces():
     router_primtives = snmp_client.get_router_primitives('10.0.0.2')
-    assert _get_expected_interface_primitives() == set(router_primtives.interfaces)
+    assert set(router_primtives.interfaces) == _get_expected_interface_primitives()
 
 
 def test_reachable_host_returns_routing_table():
     router_primitives = snmp_client.get_router_primitives('10.0.0.2')
-    assert _get_expected_routing_table() == set(router_primitives.routing_table)
+    assert set(router_primitives.routing_table) == _get_expected_routing_table()
+
+
+def test_reachable_host_returns_ospf_id():
+    router_primitives = snmp_client.get_router_primitives('10.0.0.2')
+    assert router_primitives.ospf_id == '11.0.0.1'
 
 
 def _get_expected_routing_table() -> Set[RoutePrimitives]:
@@ -74,16 +79,16 @@ def _get_loopback_interface_primitives() -> InterfacePrimitives:
 
 
 def _get_r1_route_primitives() -> RoutePrimitives:
-    return RoutePrimitives(network='10.0.0.0', mask='225.255.255.0', next_hop='10.0.0.2', route_type='3')
+    return RoutePrimitives(network='10.0.0.0', mask='255.255.255.0', next_hop='10.0.0.2', route_type='3')
 
 
 def _get_r2_route_primitives() -> RoutePrimitives:
-    return RoutePrimitives(network='11.0.0.0', mask='225.255.255.0', next_hop='11.0.0.1', route_type='3')
+    return RoutePrimitives(network='11.0.0.0', mask='255.255.255.0', next_hop='11.0.0.1', route_type='3')
 
 
 def _get_r3_route_primitives() -> RoutePrimitives:
-    return RoutePrimitives(network='12.0.0.0', mask='225.255.255.0', next_hop='11.0.0.2', route_type='4')
+    return RoutePrimitives(network='12.0.0.0', mask='255.255.255.0', next_hop='11.0.0.2', route_type='4')
 
 
 def _get_r4_route_primitives() -> RoutePrimitives:
-    return RoutePrimitives(network='13.0.0.0', mask='225.255.255.0', next_hop='13.0.0.1', route_type='3')
+    return RoutePrimitives(network='13.0.0.0', mask='255.255.255.0', next_hop='13.0.0.1', route_type='3')

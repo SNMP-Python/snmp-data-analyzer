@@ -2,10 +2,11 @@ from __future__ import absolute_import
 
 from typing import List
 
-from easysnmp import EasySNMPTimeoutError, Session
+from easysnmp import EasySNMPTimeoutError, Session, SNMPVariable
 
 from searcher.client import Client
 from searcher.exceptions.non_reachable_host import NonReachableHostException
+from searcher.exceptions.ospf_id_not_available import OSPFIdNotAvailableException
 from searcher.primitives.interface_primitives import InterfacePrimitives
 from searcher.primitives.route_primitives import RoutePrimitives
 from searcher.primitives.router_primitives import RouterPrimitives
@@ -23,6 +24,7 @@ ROUTE_NETWORK_OID = 'RFC1213-MIB::ipRouteDest'
 ROUTE_MASK_OID = 'RFC1213-MIB::ipRouteMask'
 ROUTE_NEXT_HOP_OID = 'RFC1213-MIB::ipRouteNextHop'
 ROUTE_TYPE_OID = 'RFC1213-MIB::ipRouteType'
+OSPF_ID_OID = '.1.3.6.1.2.1.14.1.1'
 IP_ROUTE_TABLE_OID = '1.3.6.1.2.1.4.21'
 RO_COMMUNITY = 'rocom'
 SNMP_VERSION = 2
@@ -53,7 +55,7 @@ class SNMPClient(Client):
             sys_name=SNMPClient._get_sys_name(session),
             interfaces=SNMPClient._get_interfaces(session),
             routing_table=SNMPClient._get_routing_table(session),
-            ospf_id='',
+            ospf_id=SNMPClient._get_ospf_id(session),
         )
 
     @staticmethod
@@ -111,13 +113,12 @@ class SNMPClient(Client):
 
     @staticmethod
     def _get_routing_table(session: Session) -> List[RoutePrimitives]:
-        queso = list(
+        return list(
             map(
                 lambda network: SNMPClient._get_route_from_network(session, network),
                 SNMPClient._get_networks(session),
             )
         )
-        return queso
 
     @staticmethod
     def _get_networks(session: Session) -> List[str]:
@@ -143,3 +144,10 @@ class SNMPClient(Client):
     @staticmethod
     def _get_route_type(session: Session, network: str) -> str:
         return str(session.get(ROUTE_TYPE_OID + '.' + network).value)
+
+    @staticmethod
+    def _get_ospf_id(session: Session) -> str:
+        result: List[SNMPVariable] = session.walk('.1.3.6.1.2.1.14.1.1')
+        if len(result) != 1:
+            raise OSPFIdNotAvailableException()
+        return result[0].value
