@@ -9,7 +9,7 @@ class RoutePrimitiveMother:
         network: str = "10.0.0.0",
         mask: str = "255.255.0.0",
         next_hop: str = "10.0.0.2",
-        route_type: str = "ospf",
+        route_type: str = "2",
     ) -> RoutePrimitives:
         return RoutePrimitives(network, mask, next_hop, route_type)
 
@@ -18,6 +18,6 @@ class RoutePrimitiveMother:
         network: str = "10.0.0.0",
         mask: str = "255.255.0.0",
         next_hop: str = "10.0.0.2",
-        route_type: str = "ospf",
+        route_type: str = "2",
     ) -> List[RoutePrimitives]:
         return [RoutePrimitiveMother.get(network, mask, next_hop, route_type)]

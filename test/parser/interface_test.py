@@ -7,6 +7,7 @@ from parser.router_parser_imp import RouterParserImp
 from parser.value_objects.interface.name import InterfaceName
 from parser.value_objects.interface.speed import SpeedInterface
 from parser.value_objects.interface.status import InterfaceStatus
+from parser.value_objects.interface.type import InterfaceType
 from test.shared.interface_primitive_mothers import InterfacePrimitiveMother
 from test.shared.router_primitive_mother import RouterPrimitiveMother
 
@@ -34,16 +35,8 @@ def test_speed_that_is_an_integer_does_not_throw_exception():
     assert speed == SpeedInterface("2")
 
 
-def test_speed_that_is_a_float_does_not_throw_exception():
-    interface = InterfacePrimitiveMother.get_list_of_one_element(speed="2.3")
-    speed = (
-        RouterParserImp(RouterPrimitiveMother.get_one_router(interfaces=interface)).get_routers()[0].interfaces[0].speed
-    )
-    assert speed == SpeedInterface("2.3")
-
-
 def test_speed_that_is_a_negative_number_throws_exception():
-    interface = InterfacePrimitiveMother.get_list_of_one_element(speed="-2.3")
+    interface = InterfacePrimitiveMother.get_list_of_one_element(speed="-232452345")
     with pytest.raises(SpeedValueException):
         RouterParserImp(RouterPrimitiveMother.get_one_router(interfaces=interface)).get_routers()
 
@@ -78,9 +71,9 @@ def test_up_value_gets_correct_status():
     interface = InterfacePrimitiveMother.get_list_of_one_element(status=InterfacePrimitiveMother.STATUS_UP)
     status = (
         RouterParserImp(RouterPrimitiveMother.get_one_router(interfaces=interface))
-        .get_routers()[0]
-        .interfaces[0]
-        .status
+            .get_routers()[0]
+            .interfaces[0]
+            .status
     )
     assert status == InterfaceStatus.UP
 
@@ -89,9 +82,9 @@ def test_down_value_gets_correct_status():
     interface = InterfacePrimitiveMother.get_list_of_one_element(status=InterfacePrimitiveMother.STATUS_DOWN)
     status = (
         RouterParserImp(RouterPrimitiveMother.get_one_router(interfaces=interface))
-        .get_routers()[0]
-        .interfaces[0]
-        .status
+            .get_routers()[0]
+            .interfaces[0]
+            .status
     )
     assert status == InterfaceStatus.DOWN
 
@@ -134,8 +127,28 @@ def test_valid_mask_and_ip_returns_correct_network():
     interface = InterfacePrimitiveMother.get_list_of_one_element(ip="10.3.2.1", mask="255.255.255.0")
     network = (
         RouterParserImp(RouterPrimitiveMother.get_one_router(interfaces=interface))
-        .get_routers()[0]
-        .interfaces[0]
-        .network
+            .get_routers()[0]
+            .interfaces[0]
+            .network
     )
     assert network == IPNetwork("10.3.2.0/24")
+
+
+def test_invalid_interface_type_throws_exception():
+    interface = InterfacePrimitiveMother.get_list_of_one_element(int_type="aa")
+    with pytest.raises(ValueError):
+        RouterParserImp(RouterPrimitiveMother.get_one_router(interfaces=interface)).get_routers()
+
+
+def test_valid_interface_type_loopback():
+    interface = InterfacePrimitiveMother.get_list_of_one_element(int_type="24")
+    type_int = RouterParserImp(RouterPrimitiveMother.get_one_router(interfaces=interface)).get_routers()[0].interfaces[
+        0].type_interface
+    assert type_int == InterfaceType.LOOPBACK
+
+
+def test_valid_interface_type_normal():
+    interface = InterfacePrimitiveMother.get_list_of_one_element(int_type="6")
+    type_int = RouterParserImp(RouterPrimitiveMother.get_one_router(interfaces=interface)).get_routers()[0].interfaces[
+        0].type_interface
+    assert type_int == InterfaceType.NORMAL

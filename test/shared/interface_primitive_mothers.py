@@ -4,16 +4,16 @@ from searcher.primitives.interface_primitives import InterfacePrimitives
 
 
 class InterfacePrimitiveMother:
-    STATUS_UP = "up"
-    STATUS_DOWN = "down"
-    INCORRECT_STATUS = "incorrect status"
+    STATUS_UP = "1"
+    STATUS_DOWN = "2"
+    INCORRECT_STATUS = "5"
 
     @staticmethod
     def get(
         ip: str = "192.168.2.1",
         name: str = "eth0",
         status: str = STATUS_UP,
-        speed: str = "25.2",
+        speed: str = "2500000",
         mask: str = "255.255.255.0",
         int_type: str = "6",
     ) -> InterfacePrimitives:
@@ -24,7 +24,7 @@ class InterfacePrimitiveMother:
         ip: str = "192.168.2.1",
         name: str = "eth0",
         status: str = STATUS_UP,
-        speed: str = "25.2",
+        speed: str = "250000000",
         mask: str = "255.255.255.0",
         int_type: str = "6",
     ) -> List[InterfacePrimitives]:

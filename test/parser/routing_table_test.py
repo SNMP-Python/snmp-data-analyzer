@@ -1,6 +1,7 @@
 from parser.exceptions.invalid_ip import InvalidIpException
 from parser.exceptions.invalid_mask import InvalidMaskException
 from parser.router_parser_imp import RouterParserImp
+from parser.value_objects.route_type import RouteType
 from parser.value_objects.routing_table_entry import RoutingTableEntry
 from test.shared.route_primitive_mother import RoutePrimitiveMother
 from test.shared.router_primitive_mother import RouterPrimitiveMother
@@ -54,4 +55,4 @@ def test_valid_parameters_returns_correct_route_table_value():
         .get_routers()[0]
         .routing_table[0]
     )
-    assert table_param == RoutingTableEntry(network=IPNetwork("10.1.0.0/16"), next_hop=IPAddress("10.2.0.1"))
+    assert table_param == RoutingTableEntry(network=IPNetwork("10.1.0.0/16"), next_hop=IPAddress("10.2.0.1"), route_type=RouteType.DIRECT)

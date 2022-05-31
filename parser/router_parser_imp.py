@@ -6,6 +6,8 @@ from parser.value_objects.interface.interface import Interface
 from parser.value_objects.interface.name import InterfaceName
 from parser.value_objects.interface.speed import SpeedInterface
 from parser.value_objects.interface.status import InterfaceStatus
+from parser.value_objects.interface.type import InterfaceType
+from parser.value_objects.route_type import RouteType
 from parser.value_objects.router import Router
 from parser.value_objects.routing_table_entry import RoutingTableEntry
 from parser.value_objects.sys_name import SysName
@@ -56,6 +58,7 @@ class RouterParserImp(RouterParser):
             name=InterfaceName(interface.interface),
             speed=SpeedInterface(interface.speed),
             status=InterfaceStatus.from_str(interface.status),
+            type_interface=InterfaceType.from_string(interface.int_type)
         )
 
     @staticmethod
@@ -64,4 +67,5 @@ class RouterParserImp(RouterParser):
     ) -> RoutingTableEntry:
         network = IPParser.get_network_from(route_primitive.network, route_primitive.mask)
         next_hop = IPParser.get_ip_address_from(route_primitive.next_hop)
-        return RoutingTableEntry(network=network, next_hop=next_hop)
+        route_type = RouteType.from_string(route_primitive.route_type)
+        return RoutingTableEntry(network=network, next_hop=next_hop, route_type=route_type)
