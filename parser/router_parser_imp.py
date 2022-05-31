@@ -11,7 +11,7 @@ from parser.value_objects.route_type import RouteType
 from parser.value_objects.router import Router
 from parser.value_objects.routing_table_entry import RoutingTableEntry
 from parser.value_objects.sys_name import SysName
-from typing import List
+from typing import List, FrozenSet
 
 from searcher.primitives.interface_primitives import InterfacePrimitives
 from searcher.primitives.route_primitives import RoutePrimitives
@@ -19,7 +19,7 @@ from searcher.primitives.router_primitives import RouterPrimitives
 
 
 class RouterParserImp(RouterParser):
-    def __init__(self, primitives: List[RouterPrimitives]):
+    def __init__(self, primitives: FrozenSet[RouterPrimitives]):
         self.primitives = primitives
 
     def get_routers(self) -> List[Router]:
