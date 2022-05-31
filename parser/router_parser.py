@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
+from parser.value_objects.router import Router
 from typing import List
-
-from common.router import Router
 
 
 class RouterParser(ABC):
