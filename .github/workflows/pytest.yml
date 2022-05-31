@@ -1,19 +1,25 @@
 on: push
 name: Pytest
 jobs:
-  gitHubActionForPytest:
-    name: GitHub Action for pytest
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.6"]
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+    - name: Install SNMP dependencies
+      run: |
+          sudo apt-get update
+          sudo apt-get install snmpd snmp libsnmp-dev -y
+    - name: Install python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r .github/requirements-ci.txt
-    - name: Analysing the code with pylint
+        pip install -r requirements.txt
+    - name: Run the tests
       run: |
         pytest .
