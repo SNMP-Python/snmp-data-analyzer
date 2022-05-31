@@ -33,7 +33,12 @@ def test_reachable_host_returns_routing_table():
 
 
 def _get_expected_routing_table() -> Set[RoutePrimitives]:
-    return {_get_r1_route_primitives(), _get_r2_route_primitives()}
+    return {
+        _get_r1_route_primitives(),
+        _get_r2_route_primitives(),
+        _get_r3_route_primitives(),
+        _get_r4_route_primitives(),
+    }
 
 
 def _get_expected_interface_primitives() -> Set[InterfacePrimitives]:
@@ -69,8 +74,16 @@ def _get_loopback_interface_primitives() -> InterfacePrimitives:
 
 
 def _get_r1_route_primitives() -> RoutePrimitives:
-    return RoutePrimitives(network='', mask='', next_hop='', route_type='')
+    return RoutePrimitives(network='10.0.0.0', mask='225.255.255.0', next_hop='10.0.0.2', route_type='3')
 
 
 def _get_r2_route_primitives() -> RoutePrimitives:
-    return RoutePrimitives(network='', mask='', next_hop='', route_type='')
+    return RoutePrimitives(network='11.0.0.0', mask='225.255.255.0', next_hop='11.0.0.1', route_type='3')
+
+
+def _get_r3_route_primitives() -> RoutePrimitives:
+    return RoutePrimitives(network='12.0.0.0', mask='225.255.255.0', next_hop='11.0.0.2', route_type='4')
+
+
+def _get_r4_route_primitives() -> RoutePrimitives:
+    return RoutePrimitives(network='13.0.0.0', mask='225.255.255.0', next_hop='13.0.0.1', route_type='3')

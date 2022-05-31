@@ -7,20 +7,22 @@ from easysnmp import EasySNMPTimeoutError, Session
 from searcher.client import Client
 from searcher.exceptions.non_reachable_host import NonReachableHostException
 from searcher.primitives.interface_primitives import InterfacePrimitives
+from searcher.primitives.route_primitives import RoutePrimitives
 from searcher.primitives.router_primitives import RouterPrimitives
 
 SYS_NAME_OID = '.1.3.6.1.2.1.1.5.0'
-INTERFACE_TABLE_OID = '.1.3.6.1.2.1.2.2.1.'
 INTERFACE_INDEX_OID = 'RFC1213-MIB::ifIndex'
 INTERFACE_STATUS_OID = 'RFC1213-MIB::ifOperStatus'
 INTERFACE_SPEED_OID = 'RFC1213-MIB::ifSpeed'
 INTERFACE_TYPE_OID = 'RFC1213-MIB::ifType'
-INTERFACE_NUM_OID = '.1.3.6.1.2.1.2.1.0'
 INTERFACE_ADDR_OID = 'RFC1213-MIB::ipAdEntAddr'
 INTERFACE_INDEX_TO_ADDR_OID = 'RFC1213-MIB::ipAdEntIfIndex'
 INTERFACE_MASK_OID = 'RFC1213-MIB::ipAdEntNetMask'
 INTERFACE_DESCR_OID = 'RFC1213-MIB::ifDescr'
-IP_ADDR_TABLE_OID = '.1.3.6.1.2.1.4.20'
+ROUTE_NETWORK_OID = 'RFC1213-MIB::ipRouteDest'
+ROUTE_MASK_OID = 'RFC1213-MIB::ipRouteMask'
+ROUTE_NEXT_HOP_OID = 'RFC1213-MIB::ipRouteNextHop'
+ROUTE_TYPE_OID = 'RFC1213-MIB::ipRouteType'
 IP_ROUTE_TABLE_OID = '1.3.6.1.2.1.4.21'
 RO_COMMUNITY = 'rocom'
 SNMP_VERSION = 2
@@ -50,7 +52,7 @@ class SNMPClient(Client):
         return RouterPrimitives(
             sys_name=SNMPClient._get_sys_name(session),
             interfaces=SNMPClient._get_interfaces(session),
-            routing_table=[],
+            routing_table=SNMPClient._get_routing_table(session),
             ospf_id='',
         )
 
@@ -63,7 +65,6 @@ class SNMPClient(Client):
 
     @staticmethod
     def _get_interfaces(session: Session) -> List[InterfacePrimitives]:
-        # index_addr_pairs = SNMPClient._get_interfaces_indx_addr_pair(session)
         return list(
             map(
                 lambda pair: SNMPClient._get_interface_from_index(session, pair.index, pair.addr),
@@ -107,3 +108,38 @@ class SNMPClient(Client):
     @staticmethod
     def _get_interface_type(session: Session, index: int) -> str:
         return str(session.get(INTERFACE_TYPE_OID + '.' + str(index)).value)
+
+    @staticmethod
+    def _get_routing_table(session: Session) -> List[RoutePrimitives]:
+        queso = list(
+            map(
+                lambda network: SNMPClient._get_route_from_network(session, network),
+                SNMPClient._get_networks(session),
+            )
+        )
+        return queso
+
+    @staticmethod
+    def _get_networks(session: Session) -> List[str]:
+        return list(map(lambda entry: str(entry.value), session.walk(ROUTE_NETWORK_OID)))
+
+    @staticmethod
+    def _get_route_from_network(session: Session, network: str) -> RoutePrimitives:
+        return RoutePrimitives(
+            network=network,
+            mask=SNMPClient._get_route_mask(session, network),
+            next_hop=SNMPClient._get_route_next_hop(session, network),
+            route_type=SNMPClient._get_route_type(session, network),
+        )
+
+    @staticmethod
+    def _get_route_mask(session: Session, network: str) -> str:
+        return str(session.get(ROUTE_MASK_OID + '.' + network).value)
+
+    @staticmethod
+    def _get_route_next_hop(session: Session, network: str) -> str:
+        return str(session.get(ROUTE_NEXT_HOP_OID + '.' + network).value)
+
+    @staticmethod
+    def _get_route_type(session: Session, network: str) -> str:
+        return str(session.get(ROUTE_TYPE_OID + '.' + network).value)
