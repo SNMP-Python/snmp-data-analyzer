@@ -1,7 +1,9 @@
+from __future__ import absolute_import
+
 from abc import ABC, abstractmethod
 from typing import List
 
-from searcher.router_primitives import RouterPrimitives
+from searcher.primitives.router_primitives import RouterPrimitives
 
 
 class RouterSearcher(ABC):

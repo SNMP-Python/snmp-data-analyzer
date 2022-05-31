@@ -2,8 +2,8 @@ from __future__ import absolute_import
 
 from typing import List
 
-from searcher.interface_primitives import InterfacePrimitives
-from searcher.route_primitives import RoutePrimitives
+from searcher.primitives.interface_primitives import InterfacePrimitives
+from searcher.primitives.route_primitives import RoutePrimitives
 
 
 class RouterPrimitives:
