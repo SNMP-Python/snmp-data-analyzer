@@ -1,5 +1,7 @@
 from parser.value_objects.router import Router
-from typing import Dict, FrozenSet, List
+from typing import Dict, FrozenSet, List, Set
+
+from netaddr import IPNetwork
 
 from distance.distance_calculator import DistanceCalculator
 from distance.points import Points
@@ -24,3 +26,16 @@ class DistanceCalculatorImp(DistanceCalculator):
         aware that this redefinition to equals implies the redefinition of equals
         in the Router object too! (And maybe more objects)
         """
+        distances = {}
+        # Create an IPNetwork set
+        visited: Set[IPNetwork] = set()
+        for router_node in self.graph:
+            for interface in router_node.router.interfaces:
+                if not visited.__contains__(interface.network):
+                    for visited_network in visited:
+                        distances[Points(interface.network.network, visited_network.network)] = [router_node.router]
+                    visited.add(interface.network)
+                else:
+                    for visited_network in visited:
+                        distances[Points(interface.network.network, visited_network.network)] += [router_node.router]
+        return distances
