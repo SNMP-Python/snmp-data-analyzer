@@ -1,4 +1,4 @@
-class RoutePrimitive:
+class RoutePrimitives:
     def __init__(self, network: str, mask: str, next_hop: str, route_type: str):
         self.network = network
         self.mask = mask

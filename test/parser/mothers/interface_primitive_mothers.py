@@ -17,7 +17,7 @@ class InterfacePrimitiveMother:
         speed: str = "25.2",
         mask: str = "255.255.255.0",
     ) -> InterfacePrimitives:
-        return InterfacePrimitives(ip, mask, name, status, speed)
+        return InterfacePrimitives(interface=name, ip_addr=ip, mask=mask, status=status, speed=speed)
 
     @staticmethod
     def get_list_of_one_element(

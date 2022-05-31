@@ -1,6 +1,6 @@
 from typing import List
 
-from searcher.route_primitive import RoutePrimitive
+from searcher.route_primitives import RoutePrimitives
 
 
 class RoutePrimitiveMother:
@@ -10,8 +10,8 @@ class RoutePrimitiveMother:
         mask: str = "255.255.0.0",
         next_hop: str = "10.0.0.2",
         route_type: str = "ospf",
-    ) -> RoutePrimitive:
-        return RoutePrimitive(network, mask, next_hop, route_type)
+    ) -> RoutePrimitives:
+        return RoutePrimitives(network, mask, next_hop, route_type)
 
     @staticmethod
     def get_list_of_one_route(
@@ -19,5 +19,5 @@ class RoutePrimitiveMother:
         mask: str = "255.255.0.0",
         next_hop: str = "10.0.0.2",
         route_type: str = "ospf",
-    ) -> List[RoutePrimitive]:
+    ) -> List[RoutePrimitives]:
         return [RoutePrimitiveMother.get(network, mask, next_hop, route_type)]

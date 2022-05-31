@@ -10,7 +10,7 @@ from parser.value_objects.sys_name import SysName
 from typing import List
 
 from searcher.interface_primitives import InterfacePrimitives
-from searcher.route_primitive import RoutePrimitive
+from searcher.route_primitives import RoutePrimitives
 from searcher.router_primitives import RouterPrimitives
 
 
@@ -33,13 +33,11 @@ class RouterParserImp(RouterParser):
     def _get_interfaces_from(
         interfaces_primitives: List[InterfacePrimitives],
     ) -> List[Interface]:
-        return list(
-            map(RouterParserImp._get_interface_from_primitive, interfaces_primitives)
-        )
+        return list(map(RouterParserImp._get_interface_from_primitive, interfaces_primitives))
 
     @staticmethod
     def _get_routing_table_from(
-        router_primitives: List[RoutePrimitive],
+        router_primitives: List[RoutePrimitives],
     ) -> List[RoutingTableEntry]:
         return list(
             map(
@@ -53,17 +51,15 @@ class RouterParserImp(RouterParser):
         network = IPParser.get_network_from(interface.ip_addr, interface.mask)
         return Interface(
             network=network,
-            name=InterfaceName(interface.name),
+            name=InterfaceName(interface.interface),
             speed=SpeedInterface(interface.speed),
             status=InterfaceStatus.from_str(interface.status),
         )
 
     @staticmethod
     def _get_routing_table_entry_from_primitive(
-        route_primitive: RoutePrimitive,
+        route_primitive: RoutePrimitives,
     ) -> RoutingTableEntry:
-        network = IPParser.get_network_from(
-            route_primitive.network, route_primitive.mask
-        )
+        network = IPParser.get_network_from(route_primitive.network, route_primitive.mask)
         next_hop = IPParser.get_ip_address_from(route_primitive.next_hop)
         return RoutingTableEntry(network=network, next_hop=next_hop)
