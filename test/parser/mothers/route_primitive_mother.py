@@ -1,6 +1,6 @@
 from typing import List
 
-from searcher.route_primitives import RoutePrimitives
+from searcher.primitives.route_primitives import RoutePrimitives
 
 
 class RoutePrimitiveMother:

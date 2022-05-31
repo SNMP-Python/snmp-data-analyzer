@@ -1,6 +1,6 @@
 from typing import List
 
-from searcher.interface_primitives import InterfacePrimitives
+from searcher.primitives.interface_primitives import InterfacePrimitives
 
 
 class InterfacePrimitiveMother:

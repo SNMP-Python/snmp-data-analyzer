@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from parser.ip_objects_converter import IPParser
 from parser.router_parser import RouterParser
 from parser.value_objects.interface.interface import Interface
@@ -9,9 +11,9 @@ from parser.value_objects.routing_table_entry import RoutingTableEntry
 from parser.value_objects.sys_name import SysName
 from typing import List
 
-from searcher.interface_primitives import InterfacePrimitives
-from searcher.route_primitives import RoutePrimitives
-from searcher.router_primitives import RouterPrimitives
+from searcher.primitives.interface_primitives import InterfacePrimitives
+from searcher.primitives.route_primitives import RoutePrimitives
+from searcher.primitives.router_primitives import RouterPrimitives
 
 
 class RouterParserImp(RouterParser):

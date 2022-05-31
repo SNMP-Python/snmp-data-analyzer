@@ -1,11 +1,10 @@
-from test.parser.mothers.interface_primitive_mothers import \
-    InterfacePrimitiveMother
+from test.parser.mothers.interface_primitive_mothers import InterfacePrimitiveMother
 from test.parser.mothers.route_primitive_mother import RoutePrimitiveMother
 from typing import List
 
-from searcher.interface_primitives import InterfacePrimitives
-from searcher.route_primitives import RoutePrimitives
-from searcher.router_primitives import RouterPrimitives
+from searcher.primitives.interface_primitives import InterfacePrimitives
+from searcher.primitives.route_primitives import RoutePrimitives
+from searcher.primitives.router_primitives import RouterPrimitives
 
 
 class RouterPrimitiveMother:
