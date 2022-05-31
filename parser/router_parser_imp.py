@@ -19,49 +19,51 @@ class RouterParserImp(RouterParser):
         self.primitives = primitives
 
     def get_routers(self) -> List[Router]:
-        return self._parse_from_primitives()
-
-    def _parse_from_primitives(self) -> List[Router]:
-        result = []
-        for router_primitive in self.primitives:
-            sys_name = SysName(router_primitive.sys_name)
-            interfaces = RouterParserImp._get_interfaces_from(
-                router_primitive.interfaces
-            )
-            routing_table = RouterParserImp._get_routing_table_from(
-                router_primitive.routing_table
-            )
-            result.append(
-                Router(
-                    sys_name=sys_name,
-                    interfaces=interfaces,
-                    routing_table=routing_table,
-                )
-            )
-        return result
+        return list(map(RouterParserImp._get_router_from, self.primitives))
 
     @staticmethod
-    def _get_interfaces_from(interfaces_primitives: List[InterfacePrimitives]):
-        interfaces: List[Interface] = []
-        for interface in interfaces_primitives:
-            network = IPParser.get_network_from(interface.ip_addr, interface.mask)
-            interfaces.append(
-                Interface(
-                    network=network,
-                    name=InterfaceName(interface.name),
-                    speed=SpeedInterface(interface.speed),
-                    status=InterfaceStatus.from_str(interface.status),
-                )
-            )
-        return interfaces
+    def _get_router_from(router: RouterPrimitives) -> Router:
+        return Router(
+            sys_name=SysName(router.sys_name),
+            interfaces=RouterParserImp._get_interfaces_from(router.interfaces),
+            routing_table=RouterParserImp._get_routing_table_from(router.routing_table),
+        )
+
+    @staticmethod
+    def _get_interfaces_from(
+        interfaces_primitives: List[InterfacePrimitives],
+    ) -> List[Interface]:
+        return list(
+            map(RouterParserImp._get_interface_from_primitive, interfaces_primitives)
+        )
 
     @staticmethod
     def _get_routing_table_from(
         router_primitives: List[RoutePrimitive],
     ) -> List[RoutingTableEntry]:
-        result = []
-        for route in router_primitives:
-            network = IPParser.get_network_from(route.network, route.mask)
-            next_hop = IPParser.get_ip_address_from(route.next_hop)
-            result.append(RoutingTableEntry(network=network, next_hop=next_hop))
-        return result
+        return list(
+            map(
+                RouterParserImp._get_routing_table_entry_from_primitive,
+                router_primitives,
+            )
+        )
+
+    @staticmethod
+    def _get_interface_from_primitive(interface: InterfacePrimitives) -> Interface:
+        network = IPParser.get_network_from(interface.ip_addr, interface.mask)
+        return Interface(
+            network=network,
+            name=InterfaceName(interface.name),
+            speed=SpeedInterface(interface.speed),
+            status=InterfaceStatus.from_str(interface.status),
+        )
+
+    @staticmethod
+    def _get_routing_table_entry_from_primitive(
+        route_primitive: RoutePrimitive,
+    ) -> RoutingTableEntry:
+        network = IPParser.get_network_from(
+            route_primitive.network, route_primitive.mask
+        )
+        next_hop = IPParser.get_ip_address_from(route_primitive.next_hop)
+        return RoutingTableEntry(network=network, next_hop=next_hop)
