@@ -37,6 +37,11 @@ def test_reachable_host_returns_ospf_id():
     assert router_primitives.ospf_id == "13.0.0.1"
 
 
+def test_reachable_host_returns_ospf_neighbors():
+    router_primitives = snmp_client.get_router_primitives('11.0.0.2')
+    assert set(router_primitives.neighbors) == {'11.0.0.2'}
+
+
 def _get_expected_routing_table() -> Set[RoutePrimitives]:
     return {
         _get_r1_route_primitives(),
@@ -88,24 +93,16 @@ def _get_loopback_interface_primitives() -> InterfacePrimitives:
 
 
 def _get_r1_route_primitives() -> RoutePrimitives:
-    return RoutePrimitives(
-        network="10.0.0.0", mask="255.255.255.0", next_hop="0.0.0.0", route_type="3"
-    )
+    return RoutePrimitives(network="10.0.0.0", mask="255.255.255.0", next_hop="0.0.0.0", route_type="3")
 
 
 def _get_r2_route_primitives() -> RoutePrimitives:
-    return RoutePrimitives(
-        network="11.0.0.0", mask="255.255.255.0", next_hop="0.0.0.0", route_type="3"
-    )
+    return RoutePrimitives(network="11.0.0.0", mask="255.255.255.0", next_hop="0.0.0.0", route_type="3")
 
 
 def _get_r3_route_primitives() -> RoutePrimitives:
-    return RoutePrimitives(
-        network="12.0.0.0", mask="255.255.255.0", next_hop="11.0.0.2", route_type="4"
-    )
+    return RoutePrimitives(network="12.0.0.0", mask="255.255.255.0", next_hop="11.0.0.2", route_type="4")
 
 
 def _get_r4_route_primitives() -> RoutePrimitives:
-    return RoutePrimitives(
-        network="13.0.0.0", mask="255.255.255.0", next_hop="0.0.0.0", route_type="3"
-    )
+    return RoutePrimitives(network="13.0.0.0", mask="255.255.255.0", next_hop="0.0.0.0", route_type="3")

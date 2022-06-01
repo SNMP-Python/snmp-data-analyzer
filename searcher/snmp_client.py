@@ -26,6 +26,7 @@ ROUTE_MASK_OID = "RFC1213-MIB::ipRouteMask"
 ROUTE_NEXT_HOP_OID = "IP-FORWARD-MIB::ipCidrRouteNextHop"
 ROUTE_TYPE_OID = "IP-FORWARD-MIB::ipCidrRouteType"
 OSPF_ID_OID = ".1.3.6.1.2.1.14.1.1"
+OSPF_BEIGHBORS_OID = 'OSPF-MIB::ospfNbrIpAddr'
 IP_ROUTE_TABLE_OID = "1.3.6.1.2.1.4.21"
 RO_COMMUNITY = "rocom"
 SNMP_VERSION = 2
@@ -57,6 +58,7 @@ class SNMPClient(Client):
             interfaces=SNMPClient._get_interfaces(session),
             routing_table=SNMPClient._get_routing_table(session),
             ospf_id=SNMPClient._get_ospf_id(session),
+            neighbors=SNMPClient._get_ospf_neighbors(session),
         )
 
     @staticmethod
@@ -165,3 +167,13 @@ class SNMPClient(Client):
         if len(result) != 1:
             raise OSPFIdNotAvailableException()
         return result[0].value
+
+    @staticmethod
+    def _get_ospf_neighbors(session: Session) -> List[str]:
+        queso = list(
+            map(
+                lambda neighbor: neighbor.value,
+                session.walk(OSPF_BEIGHBORS_OID),
+            )
+        )
+        return queso
