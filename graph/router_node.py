@@ -20,7 +20,7 @@ class RouterNode:
         )
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}(router={self.router},  adjacents={self.adjacents})"
+        return f"{type(self).__name__}(router={self.router})"
 
     def __hash__(self) -> int:
         return hash(self.router) + sum(hash(adj.router) for adj in self.adjacents)
