@@ -20,7 +20,8 @@ class SNMPRouterSearcher(RouterSearcher):
         while stack:
             current_ip = stack.pop()
             primitives_router = self.client.get_router_primitives(current_ip)
-            visited_ids.add(primitives_router.ospf_id)
+            for interface in primitives_router.interfaces:
+                visited_ids.add(interface.ip_addr)
             result.append(primitives_router)
             for id_neighbor in primitives_router.neighbors:
                 if id_neighbor not in visited_ids and id_neighbor not in stack:

@@ -70,9 +70,7 @@ class SNMPClient(Client):
     def _get_interfaces(session: Session) -> List[InterfacePrimitives]:
         return list(
             map(
-                lambda pair: SNMPClient._get_interface_from_index(
-                    session, pair.index, pair.addr
-                ),
+                lambda pair: SNMPClient._get_interface_from_index(session, pair.index, pair.addr),
                 SNMPClient._get_interfaces_indx_addr_pair(session),
             )
         )
@@ -87,9 +85,7 @@ class SNMPClient(Client):
         )
 
     @staticmethod
-    def _get_interface_from_index(
-        session: Session, index: int, addr: str
-    ) -> InterfacePrimitives:
+    def _get_interface_from_index(session: Session, index: int, addr: str) -> InterfacePrimitives:
         return InterfacePrimitives(
             interface=SNMPClient._get_interface_descr(session, index),
             ip_addr=addr,
@@ -130,9 +126,7 @@ class SNMPClient(Client):
 
     @staticmethod
     def _get_networks(session: Session) -> List[str]:
-        return list(
-            map(lambda entry: str(entry.value), session.walk(ROUTE_NETWORK_OID))
-        )
+        return list(map(lambda entry: str(entry.value), session.walk(ROUTE_NETWORK_OID)))
 
     @staticmethod
     def _get_route_from_network(session: Session, network: str) -> RoutePrimitives:
@@ -141,7 +135,7 @@ class SNMPClient(Client):
             network=network,
             mask=mask,
             next_hop=SNMPClient._get_route_next_hop(session, network, mask),
-            route_type=SNMPClient._get_route_type(session, network),
+            route_type='3',
         )
 
     @staticmethod
