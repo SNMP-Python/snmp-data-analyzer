@@ -26,3 +26,6 @@ class SpeedInterface:
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}(speed={self.speed})"
+
+    def __hash__(self) -> int:
+        return 13 * hash(self.speed)

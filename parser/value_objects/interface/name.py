@@ -17,3 +17,6 @@ class InterfaceName:
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}(name={self.name})"
+
+    def __hash__(self) -> int:
+        return 7 * hash(self.name)

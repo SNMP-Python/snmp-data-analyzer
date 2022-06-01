@@ -16,7 +16,7 @@ class RouterNode:
         return (
             self.router == other.router
             and len(self.adjacents) == len(other.adjacents)
-            and all(x in other.adjacents for x in self.adjacents)
+            and self.adjacents == other.adjacents
         )
 
     def __repr__(self) -> str:
