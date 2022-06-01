@@ -23,3 +23,6 @@ class SpeedInterface:
 
     def __str__(self) -> str:
         return f"Speed of the Interface is: {self.speed} MBytes/second"
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}(speed={self.speed})"

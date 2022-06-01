@@ -14,3 +14,9 @@ class SysName:
 
     def __str__(self) -> str:
         return f"System Name: {self.name}"
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}(name={self.name})"
+
+    def __hash__(self) -> int:
+        return hash(self.name)

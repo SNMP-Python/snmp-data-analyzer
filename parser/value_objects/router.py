@@ -10,7 +10,16 @@ class Router:
         sys_name: SysName,
         interfaces: List[Interface],
         routing_table: List[RoutingTableEntry],
-    ):
+    ) -> None:
         self.sys_name = sys_name
         self.interfaces = interfaces
         self.routing_table = routing_table
+
+    def __repr__(self) -> str:
+        return (
+            f"{type(self).__name__}(sys_name={self.sys_name}, "
+            f"interfaces={self.interfaces}, routing_table={self.routing_table})"
+        )
+
+    def __hash__(self) -> int:
+        return hash(self.sys_name)

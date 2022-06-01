@@ -14,3 +14,6 @@ class InterfaceName:
 
     def __str__(self) -> str:
         return f"Interface Name: {self.name}"
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}(name={self.name})"
