@@ -23,4 +23,4 @@ class RouterNode:
         return f"{type(self).__name__}(router={self.router},  adjacents={self.adjacents})"
 
     def __hash__(self) -> int:
-        return hash(self.router)
+        return hash(self.router) + sum(hash(adj) for adj in self.adjacents)

@@ -22,4 +22,4 @@ class Router:
         )
 
     def __hash__(self) -> int:
-        return hash(self.sys_name)
+        return hash(self.sys_name) + sum(hash(interface) for interface in self.interfaces)
