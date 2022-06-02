@@ -106,3 +106,56 @@ class RouterMother:
         ]
         third_router = Router(sys_name=SysName("router-3"), interfaces=interfaces, routing_table=[])
         return first_router, second_router, third_router
+
+    @classmethod
+    def get_four_routers_in_cycle(cls) -> Tuple[Router, ...]:
+        first_router, second_router, third_router = cls.get_three_routers_in_cycle()
+
+        interfaces = [
+            Interface(
+                network=IPNetwork("13.0.0.2/8"),
+                name=InterfaceName("eth0"),
+                speed=SpeedInterface("25.2"),
+                status=InterfaceStatus.UP,
+            ),
+            Interface(
+                network=IPNetwork("14.0.0.2/8"),
+                name=InterfaceName("eth1"),
+                speed=SpeedInterface("25.2"),
+                status=InterfaceStatus.UP,
+            ),
+        ]
+        second_router.interfaces.append(
+            Interface(
+                network=IPNetwork("13.0.0.1/8"),
+                name=InterfaceName("eth2"),
+                speed=SpeedInterface("25.2"),
+                status=InterfaceStatus.UP,
+            )
+        )
+        third_router.interfaces.append(
+            Interface(
+                network=IPNetwork("14.0.0.1/8"),
+                name=InterfaceName("eth2"),
+                speed=SpeedInterface("25.2"),
+                status=InterfaceStatus.UP,
+            )
+        )
+        fourth_router = Router(sys_name=SysName("router-4"), interfaces=interfaces, routing_table=[])
+        return first_router, second_router, third_router, fourth_router
+
+    @classmethod
+    def get_four_routers_in_three_networks(cls) -> Tuple[Router, ...]:
+        first_router, second_router, third_router = cls.get_three_routers_in_cycle()
+
+        interfaces = [
+            Interface(
+                network=IPNetwork("10.0.0.3/8"),
+                name=InterfaceName("eth0"),
+                speed=SpeedInterface("25.2"),
+                status=InterfaceStatus.UP,
+            )
+        ]
+
+        fourth_router = Router(sys_name=SysName("router-4"), interfaces=interfaces, routing_table=[])
+        return first_router, second_router, third_router, fourth_router

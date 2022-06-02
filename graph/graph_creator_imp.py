@@ -19,7 +19,6 @@ class GraphCreatorImp(GraphCreator):
         networks = self._build_networks()
         router_nodes = {router: RouterNode(router) for router in self._routers}
         for router in self._routers:
-
             adjacent_routers = set(
                 chain.from_iterable(
                     network_routers - {router}

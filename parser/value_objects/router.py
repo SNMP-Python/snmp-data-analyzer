@@ -30,15 +30,7 @@ class Router:
     def __eq__(self, other):
         if not isinstance(other, Router):
             return False
-        return (
-            self.sys_name == other.sys_name
-            and self.interfaces == other.interfaces
-            and self.routing_table == other.routing_table
-        )
+        return self.sys_name == other.sys_name and self.interfaces == other.interfaces
 
     def __hash__(self) -> int:
-        return (
-            hash(self.sys_name)
-            + sum(hash(interface) for interface in self.interfaces)
-            + sum(hash(entry) for entry in self.routing_table)
-        )
+        return hash(self.sys_name) + sum(hash(interface) for interface in self.interfaces)

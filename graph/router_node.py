@@ -30,7 +30,10 @@ class RouterNode:
         )
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}(router={self.router}, n_adjacents={len(self.adjacents)})"
+        return (
+            f"{type(self).__name__}(router={self.router.sys_name}, "
+            f"adjacents={[r.router.sys_name.name for r in self.adjacents]})"
+        )
 
     def __hash__(self) -> int:
         return 3 * hash(self.router)
