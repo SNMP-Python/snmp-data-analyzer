@@ -19,4 +19,4 @@ class SysName:
         return f"{type(self).__name__}(name={self.name})"
 
     def __hash__(self) -> int:
-        return hash(self.name)
+        return 5 * hash(self.name)

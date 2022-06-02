@@ -3,6 +3,8 @@ from parser.value_objects.routing_table_entry import RoutingTableEntry
 from parser.value_objects.sys_name import SysName
 from typing import List
 
+from netaddr import IPAddress
+
 
 class Router:
     def __init__(
@@ -14,6 +16,10 @@ class Router:
         self.sys_name = sys_name
         self.interfaces = interfaces
         self.routing_table = routing_table
+
+    def is_connected(self, network: IPAddress) -> bool:  # TODO: Add tests of this method
+        """Returns if any of the interfaces belong to the given network"""
+        return any(interface.network.network == network for interface in self.interfaces)
 
     def __repr__(self) -> str:
         return (
@@ -31,4 +37,8 @@ class Router:
         )
 
     def __hash__(self) -> int:
-        return hash(self.sys_name) + sum(hash(interface) for interface in self.interfaces)
+        return (
+            hash(self.sys_name)
+            + sum(hash(interface) for interface in self.interfaces)
+            + sum(hash(entry) for entry in self.routing_table)
+        )

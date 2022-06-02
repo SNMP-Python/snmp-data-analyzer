@@ -10,3 +10,6 @@ class RoutingTableEntry:
         if not isinstance(other, RoutingTableEntry):
             return NotImplemented
         return self.network == other.network and self.next_hop == other.next_hop
+
+    def __hash__(self):
+        return hash(self.network) + hash(self.next_hop)

@@ -19,8 +19,13 @@ class GraphCreatorImp(GraphCreator):
         networks = self._build_networks()
         router_nodes = {router: RouterNode(router) for router in self._routers}
         for router in self._routers:
+
             adjacent_routers = set(
-                chain.from_iterable(network_routers - {router} for network_routers in networks.values())
+                chain.from_iterable(
+                    network_routers - {router}
+                    for network, network_routers in networks.items()
+                    if router.is_connected(network)
+                )
             )
             for adjacent in adjacent_routers:
                 router_nodes[router].add_adjacent(router_nodes[adjacent])
@@ -28,6 +33,10 @@ class GraphCreatorImp(GraphCreator):
         return frozenset(router_nodes.values())
 
     def _build_networks(self) -> Dict[IPAddress, Set[Router]]:
+        """
+        Builds a dictionary with the routers with the network as the key, and a set with the routers
+        that belong to that network as values
+        """
         networks: Dict[IPAddress, Set[Router]] = {}
         for router in self._routers:
             for interface in router.interfaces:

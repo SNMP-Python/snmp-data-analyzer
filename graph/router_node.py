@@ -14,10 +14,9 @@ class RouterNode:
             heapq.heappush(self.adjacents, router_node)
 
     def __eq__(self, other) -> bool:
-        visited: List['RouterNode'] = []
-        return self._equals(other, visited)
+        return self._equals(other, [])
 
-    def _equals(self, other, visited):
+    def _equals(self, other, visited) -> bool:
         if self in visited or other in visited:
             return True
 
@@ -34,10 +33,10 @@ class RouterNode:
         return f"{type(self).__name__}(router={self.router}, n_adjacents={len(self.adjacents)})"
 
     def __hash__(self) -> int:
-        return self._hash([])
+        return 3 * hash(self.router)
 
-    def _hash(self, visited) -> int:
-        if self in visited:
-            return hash(self.router) * 3
-        visited.append(self)
-        return hash(self.router) * 3 + sum(adj._hash(visited) for adj in self.adjacents)  # pylint: disable=W0212
+    def __lt__(self, other) -> bool:
+        if not isinstance(other, RouterNode):
+            raise TypeError(f"can't compare between '{type(self).__name__}' and '{type(other).__name__}'")
+
+        return self.router.sys_name.name < other.router.sys_name.name
