@@ -34,7 +34,7 @@ class GraphCreatorImp(GraphCreator):
 
     def _build_networks(self) -> Dict[IPAddress, Set[Router]]:
         """
-        Builds a dictionary with the routers with the network as the key, and a set with the routers
+        Builds a dictionary with the network as the key, and a set with the routers
         that belong to that network as values
         """
         networks: Dict[IPAddress, Set[Router]] = {}
