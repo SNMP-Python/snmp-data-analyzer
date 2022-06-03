@@ -14,10 +14,10 @@ def test_graph_creator_one_router_outputs_expected_graph():
     graph_creator = GraphCreatorImp([router])
     router_node = RouterNode(router=router)
 
+    expected_graph = frozenset({router_node})
     actual_graph = graph_creator.get_graph()
 
-    assert len(actual_graph) == 1
-    assert router_node in actual_graph
+    assert actual_graph == expected_graph
 
 
 def test_graph_creator_two_routers_cycled_output_expected_graph():
@@ -27,11 +27,10 @@ def test_graph_creator_two_routers_cycled_output_expected_graph():
     second_router_node = RouterNode(router=second_router, adjacents=[first_router_node])
     first_router_node.add_adjacent(second_router_node)
 
+    expected_graph = frozenset({first_router_node, second_router_node})
     actual_graph = graph_creator.get_graph()
 
-    assert len(actual_graph) == 2
-    assert first_router_node in actual_graph
-    assert second_router_node in actual_graph
+    assert actual_graph == expected_graph
 
 
 def test_graph_creator_three_routers_without_cycle_output_expected_graph():
@@ -43,12 +42,10 @@ def test_graph_creator_three_routers_without_cycle_output_expected_graph():
     first_router_node.add_adjacent(second_router_node)
     third_router_node.add_adjacent(second_router_node)
 
+    expected_graph = frozenset({first_router_node, second_router_node, third_router_node})
     actual_graph = graph_creator.get_graph()
 
-    assert len(actual_graph) == 3
-    assert first_router_node in actual_graph
-    assert second_router_node in actual_graph
-    assert third_router_node in actual_graph
+    assert actual_graph == expected_graph
 
 
 def test_graph_creator_three_routers_cycled_output_expected_graph():
@@ -61,12 +58,10 @@ def test_graph_creator_three_routers_cycled_output_expected_graph():
     first_router_node.add_adjacent(third_router_node)
     second_router_node.add_adjacent(third_router_node)
 
+    expected_graph = frozenset({first_router_node, second_router_node, third_router_node})
     actual_graph = graph_creator.get_graph()
 
-    assert len(actual_graph) == 3
-    assert first_router_node in actual_graph
-    assert second_router_node in actual_graph
-    assert third_router_node in actual_graph
+    assert actual_graph == expected_graph
 
 
 def test_graph_creator_four_routers_cycled_output_expected_graph():
@@ -91,13 +86,10 @@ def test_graph_creator_four_routers_cycled_output_expected_graph():
     fourth_router_node.add_adjacent(second_router_node)
     fourth_router_node.add_adjacent(third_router_node)
 
+    expected_graph = frozenset({first_router_node, second_router_node, third_router_node, fourth_router_node})
     actual_graph = graph_creator.get_graph()
 
-    assert len(actual_graph) == 4
-    assert first_router_node in actual_graph
-    assert second_router_node in actual_graph
-    assert third_router_node in actual_graph
-    assert fourth_router_node in actual_graph
+    assert actual_graph == expected_graph
 
 
 def test_graph_creator_four_routers_three_networks_output_expected_graph():
@@ -122,9 +114,7 @@ def test_graph_creator_four_routers_three_networks_output_expected_graph():
     fourth_router_node.add_adjacent(first_router_node)
     fourth_router_node.add_adjacent(second_router_node)
 
+    expected_graph = frozenset({first_router_node, second_router_node, third_router_node, fourth_router_node})
     actual_graph = graph_creator.get_graph()
 
-    assert first_router_node in actual_graph
-    assert second_router_node in actual_graph
-    assert third_router_node in actual_graph
-    assert fourth_router_node in actual_graph
+    assert actual_graph == expected_graph
