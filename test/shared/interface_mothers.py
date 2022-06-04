@@ -8,7 +8,6 @@ from parser.value_objects.interface.type import InterfaceType
 
 
 class InterfaceMother:
-
     @staticmethod
     def get_interface_with_status(status: InterfaceStatus) -> Interface:
         return InterfaceMother.get(status=status)
@@ -19,16 +18,10 @@ class InterfaceMother:
 
     @staticmethod
     def get(
-            network=IPNetwork("10.0.0.0/24"),
-            name=InterfaceName("Test-Router"),
-            speed=SpeedInterface("1000000"),
-            status=InterfaceStatus.UP,
-            type_interface=InterfaceType.NORMAL
+        network=IPNetwork("10.0.0.0/24"),
+        name=InterfaceName("eth0"),
+        speed=SpeedInterface("1000000"),
+        status=InterfaceStatus.UP,
+        type_interface=InterfaceType.NORMAL,
     ) -> Interface:
-        return Interface(
-            network=network,
-            name=name,
-            speed=speed,
-            status=status,
-            type_interface=type_interface
-        )
+        return Interface(network=network, name=name, speed=speed, status=status, type_interface=type_interface)

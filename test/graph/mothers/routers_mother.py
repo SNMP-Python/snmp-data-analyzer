@@ -1,10 +1,12 @@
 from typing import List, Tuple
 
+from netaddr import IPNetwork
+
 from parser.value_objects.interface.interface import Interface
 from parser.value_objects.router import Router
 from parser.value_objects.routing_table_entry import RoutingTableEntry
 from parser.value_objects.sys_name import SysName
-from test.graph.mothers.interface_mother import InterfaceMother
+from test.shared.interface_mothers import InterfaceMother
 
 
 class RouterMother:
@@ -16,7 +18,10 @@ class RouterMother:
 
     @classmethod
     def get_one_router(cls) -> Router:
-        interfaces = [InterfaceMother.get("10.0.0.1/8", "eth0"), InterfaceMother.get("12.0.0.1/8", "eth1")]
+        interfaces = [
+            InterfaceMother.get(network=IPNetwork("10.0.0.1/8")),
+            InterfaceMother.get(network=IPNetwork("12.0.0.1/8")),
+        ]
 
         router = Router(sys_name=SysName("router-1"), interfaces=interfaces, routing_table=[])
         return router
@@ -34,8 +39,8 @@ class RouterMother:
         first_router = cls.get_one_router()
 
         interfaces = [
-            InterfaceMother.get("10.0.0.2/8", "eth0"),
-            InterfaceMother.get("11.0.0.2/8", "eth1"),
+            InterfaceMother.get(network=IPNetwork("10.0.0.2/8")),
+            InterfaceMother.get(network=IPNetwork("11.0.0.2/8")),
         ]
         second_router = Router(sys_name=SysName("router-2"), interfaces=interfaces, routing_table=[])
         return first_router, second_router
@@ -54,8 +59,8 @@ class RouterMother:
         first_router, second_router = cls.get_two_routers_in_cycle()
 
         interfaces = [
-            InterfaceMother.get("11.0.0.1/8", "eth0"),
-            InterfaceMother.get("12.0.0.2/8", "eth0"),
+            InterfaceMother.get(network=IPNetwork("11.0.0.1/8")),
+            InterfaceMother.get(network=IPNetwork("12.0.0.2/8")),
         ]
         third_router = Router(sys_name=SysName("router-3"), interfaces=interfaces, routing_table=[])
         return first_router, second_router, third_router
@@ -68,7 +73,7 @@ class RouterMother:
         """
         first_router, second_router = cls.get_two_routers_in_cycle()
 
-        interfaces = [InterfaceMother.get("11.0.0.1/8", "eth0")]
+        interfaces = [InterfaceMother.get(network=IPNetwork("11.0.0.1/8"))]
         third_router = Router(sys_name=SysName("router-3"), interfaces=interfaces, routing_table=[])
         return first_router, second_router, third_router
 
@@ -76,9 +81,12 @@ class RouterMother:
     def get_four_routers_in_cycle(cls) -> Tuple[Router, ...]:
         first_router, second_router, third_router = cls.get_three_routers_in_cycle()
 
-        interfaces = [InterfaceMother.get("13.0.0.2/8", "eth0"), InterfaceMother.get("14.0.0.2/8", "eth1")]
-        second_router.interfaces.append(InterfaceMother.get("13.0.0.1/8", "eth2"))
-        third_router.interfaces.append(InterfaceMother.get("14.0.0.1/8", "eth2"))
+        interfaces = [
+            InterfaceMother.get(network=IPNetwork("13.0.0.2/8")),
+            InterfaceMother.get(network=IPNetwork("14.0.0.2/8")),
+        ]
+        second_router.interfaces.append(InterfaceMother.get(network=IPNetwork("13.0.0.1/8")))
+        third_router.interfaces.append(InterfaceMother.get(network=IPNetwork("14.0.0.1/8")))
         fourth_router = Router(sys_name=SysName("router-4"), interfaces=interfaces, routing_table=[])
         return first_router, second_router, third_router, fourth_router
 
@@ -86,7 +94,7 @@ class RouterMother:
     def get_four_routers_in_three_networks(cls) -> Tuple[Router, ...]:
         first_router, second_router, third_router = cls.get_three_routers_in_cycle()
 
-        interfaces = [InterfaceMother.get("10.0.0.3/8", "eth0")]
+        interfaces = [InterfaceMother.get(network=IPNetwork("10.0.0.3/8"))]
 
         fourth_router = Router(sys_name=SysName("router-4"), interfaces=interfaces, routing_table=[])
         return first_router, second_router, third_router, fourth_router
