@@ -42,10 +42,10 @@ class RouterPrimitiveMother:
         ]
 
     @staticmethod
-    def get_router_with(id_router: int, neighbors: List[str], ospf_id: str):
+    def get_router_with(id_router: int, neighbors: List[str], ospf_id: str, ips: List[str]):
         return RouterPrimitives(
             sys_name=f"Router-{id_router}",
-            interfaces=[],
+            interfaces=InterfacePrimitiveMother.get_list_of_n_elements(ips),
             routing_table=[],
             neighbors=neighbors,
             ospf_id=ospf_id,
