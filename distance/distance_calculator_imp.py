@@ -3,6 +3,7 @@ from typing import Dict, FrozenSet, List
 from netaddr import IPAddress, IPNetwork
 
 from distance.distance_calculator import DistanceCalculator
+from distance.path import Path
 from distance.points import Points
 from graph.router_node import RouterNode
 from parser.value_objects.router import Router
@@ -11,7 +12,7 @@ from parser.value_objects.router import Router
 class DistanceCalculatorImp(DistanceCalculator):
     def __init__(self, graph: FrozenSet[RouterNode]):
         self.graph = graph
-        self.distances: Dict[Points, List[Router]] = {}
+        self.distances: Dict[Points, Path] = {}
         self.destinations = self._get_destinations()
 
     def _get_destinations(self) -> set[IPAddress]:
@@ -25,7 +26,7 @@ class DistanceCalculatorImp(DistanceCalculator):
                 destinations.add(interface.network.ip)
         return destinations
 
-    def get_distances(self) -> Dict[Points, List[Router]]:
+    def get_distances(self) -> Dict[Points, Path]:
         """
         For every pair of ip's calculates the shortest path between them.
         :return: Dict of points with the shortest paths between these two points
@@ -35,7 +36,7 @@ class DistanceCalculatorImp(DistanceCalculator):
             if self._discard_point(point):
                 continue
             if point not in self.distances:
-                self.distances[point] = []
+                self.distances[point] = Path()
                 self._get_distance_for_point(point, router_node.router)
 
         return self.distances
@@ -66,7 +67,7 @@ class DistanceCalculatorImp(DistanceCalculator):
         Fills the distances dict with the shortest path between the two points
         :param point: Points to fill the dict with
         """
-        self.distances[point].append(current_router)
+        self.distances[point].add_router(current_router)
         for interface in current_router.interfaces:
             if interface.network.ip == (point.destination or point.source):
                 return

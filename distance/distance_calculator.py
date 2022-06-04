@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
-from parser.value_objects.router import Router
-from typing import Dict, List
+from typing import Dict
 
+from distance.path import Path
 from distance.points import Points
 
 
 class DistanceCalculator(ABC):
     @abstractmethod
-    def get_distances(self) -> Dict[Points, List[Router]]:
+    def get_distances(self) -> Dict[Points, Path]:
         pass

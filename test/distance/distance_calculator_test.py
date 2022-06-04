@@ -1,8 +1,12 @@
-from netaddr import IPAddress, IPNetwork
+from typing import Dict, List
+
 from deepdiff import DeepDiff
+from netaddr import IPAddress, IPNetwork
 
 from distance.distance_calculator_imp import DistanceCalculatorImp
+from distance.path import Path
 from distance.points import Points
+from parser.value_objects.router import Router
 from test.distance.mothers.one_router_graph_mother import OneRouterGraphMother
 from test.distance.mothers.three_routers_graph_mother import ThreeRoutersGraphMother
 from test.distance.mothers.two_routers_graph_mother import \
@@ -27,13 +31,13 @@ def test_one_router_three_interfaces_outputs_expected_dict():
     router = OneRouterGraphMother._get_one_router_three_interfaces()
     expected = {}
     expected_first_point = Points(source=IPAddress('6.0.0.2'), destination=IPAddress('8.0.0.5'))
-    expected[expected_first_point] = [router]
+    expected[expected_first_point] = Path([router])
 
     expected_second_point = Points(source=IPAddress('8.0.0.5'), destination=IPAddress('10.0.0.6'))
-    expected[expected_second_point] = [router]
+    expected[expected_second_point] = Path([router])
 
     expected_third_point = Points(source=IPAddress('6.0.0.2'), destination=IPAddress('10.0.0.6'))
-    expected[expected_third_point] = [router]
+    expected[expected_third_point] = Path([router])
 
     actual = distance_calculator.get_distances()
     assert actual == expected
@@ -47,16 +51,10 @@ def test_two_router_one_interface_each_outputs_expected_dict():
 
     expected = {}
     expected_first_point = Points(source=IPAddress('6.0.0.1'), destination=IPAddress('6.0.0.2'))
-    expected[expected_first_point] = [first_router, second_router]
-
-    expected_inverse = {}
-    expected_inverse_point = Points(source=IPAddress('6.0.0.2'), destination=IPAddress('6.0.0.1'))
-    expected_inverse[expected_inverse_point] = [second_router, first_router]
+    expected[expected_first_point] = Path([first_router, second_router])
 
     actual = distance_calculator.get_distances()
-    diff = DeepDiff(actual, expected)
-    inverse_diff = DeepDiff(actual, expected_inverse)
-    assert diff == {} or inverse_diff == {}
+    assert actual == expected
 
 
 def test_three_routers_one_interface_each_outputs_expected_dict():
@@ -87,28 +85,28 @@ def test_three_routers_one_interface_each_outputs_expected_dict():
 
     point_108_1010 = Points(source=IPAddress('10.0.0.8'), destination=IPAddress('10.0.0.10'))
 
-    expected[point_62_64] = [first_router, second_router]
-    expected[point_62_84] = [first_router]
-    expected[point_62_86] = [first_router, third_router]
-    expected[point_62_108] = [first_router, second_router]
+    expected[point_62_64] = Path([first_router, second_router])
+    expected[point_62_84] = Path([first_router])
+    expected[point_62_86] = Path([first_router, third_router])
+    expected[point_62_108] = Path([first_router, second_router])
     # expected[point_62_1010] = [first_router, third_router]
-    expected[point_62_1010] = [first_router, second_router, third_router]
+    expected[point_62_1010] = Path([first_router, second_router, third_router])
 
     # expected[point_64_84] = [second_router, first_router]
-    expected[point_64_84] = [second_router, third_router, first_router]
+    expected[point_64_84] = Path([second_router, third_router, first_router])
     # expected[point_64_86] = [second_router, third_router]
-    expected[point_64_86] = [second_router, first_router, third_router]
-    expected[point_64_108] = [second_router]
-    expected[point_64_1010] = [second_router, third_router]
+    expected[point_64_86] = Path([second_router, first_router, third_router])
+    expected[point_64_108] = Path([second_router])
+    expected[point_64_1010] = Path([second_router, third_router])
 
-    expected[point_84_86] = [first_router, third_router]
-    expected[point_84_108] = [first_router, second_router]
-    expected[point_84_1010] = [first_router, third_router]
+    expected[point_84_86] = Path([first_router, third_router])
+    expected[point_84_108] = Path([first_router, second_router])
+    expected[point_84_1010] = Path([first_router, third_router])
 
-    expected[point_86_108] = [third_router, second_router]
-    expected[point_86_1010] = [third_router]
+    expected[point_86_108] = Path([third_router, second_router])
+    expected[point_86_1010] = Path([third_router])
 
-    expected[point_108_1010] = [second_router, third_router]
+    expected[point_108_1010] = Path([second_router, third_router])
 
     actual = distance_calculator.get_distances()
     assert actual == expected

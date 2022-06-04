@@ -19,3 +19,9 @@ class Points:
 
     def __hash__(self):
         return hash(self.source) * hash(self.destination)
+
+    def __repr__(self) -> str:
+        return str(self)
+
+    def __str__(self) -> str:
+        return f"{self.source} -> {self.destination}"
