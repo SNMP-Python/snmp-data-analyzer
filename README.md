@@ -24,7 +24,7 @@ sudo mkdir scripts
 cd traps
 sudo cp trapsh.sh /etc/snmp/scripts
 ```
-#### Run snmpd service and snmpdtrap service
+#### Run snmpd and snmpdtrap services
 ```shell
 systemctl start snmpd
 systemctl start snmpdtrap
