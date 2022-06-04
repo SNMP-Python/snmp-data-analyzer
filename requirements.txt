@@ -7,3 +7,4 @@ pre-commit
 pytest
 isort
 mypy
+graphviz==0.19.1

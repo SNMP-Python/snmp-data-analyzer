@@ -1,3 +1,8 @@
+from __future__ import absolute_import
+
+from graph.graph_creator_imp import GraphCreatorImp
+from painter.graphviz_painter import GraphVizPainter
+from parser.interface_remover import InterfaceRemover
 from parser.router_parser import RouterParser
 from parser.router_parser_imp import RouterParserImp
 from searcher.router_searcher import RouterSearcher
@@ -24,9 +29,14 @@ def main():
             print(f"\t\tNetwork: {table_entry.network.ip}:")
             print(f"\t\tMask: {table_entry.network.netmask}:")
             print(f"\t\tNext Hop: {table_entry.next_hop}:")
+    InterfaceRemover.remove_down_and_loopback(list_routers)
+    graph = GraphCreatorImp(list_routers).get_graph()
+    painter = GraphVizPainter(graph)
+    painter.paint()
 
 
 def get_ip_addr_from_input() -> str:
+    # pylint: disable=W1632
     ip_addr = input("Please, insert ip address:")
     return ip_addr
 
