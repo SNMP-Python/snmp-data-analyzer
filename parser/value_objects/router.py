@@ -17,7 +17,7 @@ class Router:
         self.interfaces = interfaces
         self.routing_table = routing_table
 
-    def is_connected(self, network: IPAddress) -> bool:  # TODO: Add tests of this method
+    def is_connected(self, network: IPAddress) -> bool:
         """Returns if any of the interfaces belong to the given network"""
         return any(interface.network.network == network for interface in self.interfaces)
 
