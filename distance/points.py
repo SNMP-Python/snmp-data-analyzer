@@ -18,4 +18,4 @@ class Points:
         return self.source == other.destination and self.destination == other.source
 
     def __hash__(self):
-        return hash((self.source, self.destination))
+        return hash(self.source) * hash(self.destination)

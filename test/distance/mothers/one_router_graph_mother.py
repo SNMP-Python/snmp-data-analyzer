@@ -13,7 +13,7 @@ from graph.graph_creator_imp import GraphCreatorImp
 from graph.router_node import RouterNode
 
 
-class GraphMother:
+class OneRouterGraphMother:
     @classmethod
     def get_one_router_one_interface_graph(cls) -> FrozenSet[RouterNode]:
         interfaces = [
@@ -76,47 +76,3 @@ class GraphMother:
     def get_one_router_three_interfaces_graph(cls) -> FrozenSet[RouterNode]:
         router = cls._get_one_router_three_interfaces()
         return GraphCreatorImp([router]).get_graph()
-
-    @classmethod
-    def _get_first_router_second_test(cls):
-        interfaces = [
-            Interface(
-                network=IPNetwork("6.0.0.1/24"),
-                name=InterfaceName("eth0"),
-                speed=SpeedInterface("25.2"),
-                status=InterfaceStatus.UP,
-            )
-        ]
-        routing_table = [
-            RoutingTableEntry(
-                network=IPNetwork('8.0.0.0/24'),
-                next_hop=IPAddress('8.0.0.2'),
-            ),
-        ]
-        router = Router(sys_name=SysName("router-1"), interfaces=interfaces, routing_table=routing_table)
-        return router
-
-    @classmethod
-    def _get_second_router_second_test(cls):
-        interfaces = [
-            Interface(
-                network=IPNetwork("8.0.0.2/24"),
-                name=InterfaceName("eth0"),
-                speed=SpeedInterface("25.2"),
-                status=InterfaceStatus.UP,
-            )
-        ]
-        routing_table = [
-            RoutingTableEntry(
-                network=IPNetwork('6.0.0.0/24'),
-                next_hop=IPAddress('6.0.0.1'),
-            ),
-        ]
-        router = Router(sys_name=SysName("router-1"), interfaces=interfaces, routing_table=routing_table)
-        return router
-
-    @classmethod
-    def get_two_routers_one_interface_graph(cls) -> FrozenSet[RouterNode]:
-        first_router = cls._get_first_router_second_test()
-        second_router = cls._get_second_router_second_test()
-        return GraphCreatorImp([first_router, second_router]).get_graph()
