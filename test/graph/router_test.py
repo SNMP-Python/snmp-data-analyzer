@@ -3,6 +3,11 @@ from netaddr import IPAddress
 from test.graph.mothers.routers_mother import RouterMother
 
 
+def test_router_with_no_interfaces_is_not_connected_to_network():
+    router = RouterMother.get("router-1")
+    assert router.is_connected(IPAddress("11.0.0.0")) is False
+
+
 def test_router_is_connected_to_two_networks():
     router = RouterMother.get_one_router()
     assert router.is_connected(IPAddress("10.0.0.0"))
