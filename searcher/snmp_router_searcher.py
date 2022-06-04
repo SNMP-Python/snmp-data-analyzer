@@ -31,8 +31,5 @@ class SNMPRouterSearcher(RouterSearcher):
         self.ips_to_visit.extend(self._get_ips_to_visit_from_router(router))
 
     def _get_ips_to_visit_from_router(self, router: RouterPrimitives) -> List[str]:
-        result = []
-        for id_neighbor in router.neighbors:
-            if id_neighbor not in self.visited_ips and id_neighbor not in self.ips_to_visit:
-                self.ips_to_visit.append(id_neighbor)
-        return result
+        return list(filter(lambda ip_addr: ip_addr not in self.visited_ips and ip_addr not in self.ips_to_visit,
+                           router.neighbors))
