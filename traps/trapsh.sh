@@ -11,4 +11,4 @@ do
 		vars="$vars, $oid = $val"
 	fi
 done
-echo trap: $1 $host $ip $vars >> logs.txt
+echo trap: $1 $host $ip $vars >> /home/oscar/logs.txt
