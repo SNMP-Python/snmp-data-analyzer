@@ -26,8 +26,8 @@ class TwoRoutersGraphMother:
         ]
         routing_table = [
             RoutingTableEntry(
-                network=IPNetwork('8.0.0.0/24'),
-                next_hop=IPAddress('8.0.0.2'),
+                network=IPNetwork('6.0.0.0/24'),
+                next_hop=IPAddress('0.0.0.0'),
             ),
         ]
         router = Router(sys_name=SysName("router-1"), interfaces=interfaces, routing_table=routing_table)
@@ -37,7 +37,7 @@ class TwoRoutersGraphMother:
     def _get_second_router_second_test(cls) -> Router:
         interfaces = [
             Interface(
-                network=IPNetwork("8.0.0.2/24"),
+                network=IPNetwork("6.0.0.2/24"),
                 name=InterfaceName("eth0"),
                 speed=SpeedInterface("25.2"),
                 status=InterfaceStatus.UP,
@@ -46,7 +46,7 @@ class TwoRoutersGraphMother:
         routing_table = [
             RoutingTableEntry(
                 network=IPNetwork('6.0.0.0/24'),
-                next_hop=IPAddress('6.0.0.1'),
+                next_hop=IPAddress('0.0.0.0'),
             ),
         ]
         router = Router(sys_name=SysName("router-2"), interfaces=interfaces, routing_table=routing_table)

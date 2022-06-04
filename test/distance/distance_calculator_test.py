@@ -1,5 +1,5 @@
-from deepdiff import DeepDiff
 from netaddr import IPAddress, IPNetwork
+from deepdiff import DeepDiff
 
 from distance.distance_calculator_imp import DistanceCalculatorImp
 from distance.points import Points
@@ -44,14 +44,19 @@ def test_two_router_one_interface_each_outputs_expected_dict():
     distance_calculator = DistanceCalculatorImp(graph)
     first_router = TwoRoutersGraphMother._get_first_router_second_test()
     second_router = TwoRoutersGraphMother._get_second_router_second_test()
+
     expected = {}
-    expected_first_point = Points(source=IPAddress('6.0.0.1'), destination=IPAddress('8.0.0.2'))
+    expected_first_point = Points(source=IPAddress('6.0.0.1'), destination=IPAddress('6.0.0.2'))
     expected[expected_first_point] = [first_router, second_router]
+
+    expected_inverse = {}
+    expected_inverse_point = Points(source=IPAddress('6.0.0.2'), destination=IPAddress('6.0.0.1'))
+    expected_inverse[expected_inverse_point] = [second_router, first_router]
 
     actual = distance_calculator.get_distances()
     diff = DeepDiff(actual, expected)
-    for position in diff.keys():
-        assert diff[position] == [None]
+    inverse_diff = DeepDiff(actual, expected_inverse)
+    assert diff == {} or inverse_diff == {}
 
 
 def test_three_routers_one_interface_each_outputs_expected_dict():
@@ -86,10 +91,13 @@ def test_three_routers_one_interface_each_outputs_expected_dict():
     expected[point_62_84] = [first_router]
     expected[point_62_86] = [first_router, third_router]
     expected[point_62_108] = [first_router, second_router]
-    expected[point_62_1010] = [first_router, third_router]
+    # expected[point_62_1010] = [first_router, third_router]
+    expected[point_62_1010] = [first_router, second_router, third_router]
 
-    expected[point_64_84] = [second_router, first_router]
-    expected[point_64_86] = [second_router, third_router]
+    # expected[point_64_84] = [second_router, first_router]
+    expected[point_64_84] = [second_router, third_router, first_router]
+    # expected[point_64_86] = [second_router, third_router]
+    expected[point_64_86] = [second_router, first_router, third_router]
     expected[point_64_108] = [second_router]
     expected[point_64_1010] = [second_router, third_router]
 
@@ -103,6 +111,4 @@ def test_three_routers_one_interface_each_outputs_expected_dict():
     expected[point_108_1010] = [second_router, third_router]
 
     actual = distance_calculator.get_distances()
-    diff = DeepDiff(actual, expected)
-    for position in diff.keys():
-        assert diff[position] == [None]
+    assert actual == expected

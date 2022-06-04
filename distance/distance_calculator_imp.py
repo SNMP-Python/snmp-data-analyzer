@@ -49,8 +49,6 @@ class DistanceCalculatorImp(DistanceCalculator):
         """
         if point.source == point.destination:
             return True
-        if (point.source or point.destination) == IPAddress('0.0.0.0'):
-            return True
         return False
 
     def _get_interfaces_with_destination(self):
@@ -70,21 +68,35 @@ class DistanceCalculatorImp(DistanceCalculator):
         """
         self.distances[point].append(current_router)
         for interface in current_router.interfaces:
-            if interface.network.ip == point.destination:
+            if interface.network.ip == (point.destination or point.source):
                 return
         next_router = self._get_next_router(point, current_router)
         self._get_distance_for_point(point, next_router)
 
     def _get_next_router(self, point: Points, current_router: Router) -> Router:
         next_hop = self._find_next_hop_for_destination(point, current_router)
+        if next_hop == IPAddress('0.0.0.0'):
+            return self._search_adjancent_router(point, current_router)
         router = self._find_router_for_next_hop(next_hop)
         return router
 
     @staticmethod
-    def _find_next_hop_for_destination(point: Points, current_router: Router) -> IPNetwork:
+    def _find_next_hop_for_destination(point: Points, current_router: Router) -> IPAddress:
         for entry in current_router.routing_table:
             if point.destination & entry.network.netmask:
-                return entry.network
+                return entry.next_hop
+
+    def _search_adjancent_router(self, point: Points, current_router: Router) -> Router:
+        current_router_node = self._find_router_node_for_router(current_router)
+        for adjacent_router in current_router_node.adjacents:
+            for interface in adjacent_router.router.interfaces:
+                if point.destination == interface.network.ip:
+                    return adjacent_router.router
+
+    def _find_router_node_for_router(self, router: Router) -> RouterNode:
+        for router_node in self.graph:
+            if router_node.router == router:
+                return router_node
 
     def _find_router_for_next_hop(self, next_hop: IPNetwork) -> Router:
         for router_node in self.graph:
