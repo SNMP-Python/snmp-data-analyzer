@@ -38,7 +38,7 @@ def test_reachable_host_returns_ospf_id():
 
 
 def test_reachable_host_returns_ospf_neighbors():
-    router_primitives = snmp_client.get_router_primitives('11.0.0.2')
+    router_primitives = snmp_client.get_router_primitives('10.0.0.2')
     assert set(router_primitives.neighbors) == {'11.0.0.2'}
 
 

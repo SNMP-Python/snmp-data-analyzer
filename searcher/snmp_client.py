@@ -72,9 +72,7 @@ class SNMPClient(Client):
     def _get_interfaces(session: Session) -> List[InterfacePrimitives]:
         return list(
             map(
-                lambda pair: SNMPClient._get_interface_from_index(
-                    session, pair.index, pair.addr
-                ),
+                lambda pair: SNMPClient._get_interface_from_index(session, pair.index, pair.addr),
                 SNMPClient._get_interfaces_indx_addr_pair(session),
             )
         )
@@ -89,9 +87,7 @@ class SNMPClient(Client):
         )
 
     @staticmethod
-    def _get_interface_from_index(
-        session: Session, index: int, addr: str
-    ) -> InterfacePrimitives:
+    def _get_interface_from_index(session: Session, index: int, addr: str) -> InterfacePrimitives:
         return InterfacePrimitives(
             interface=SNMPClient._get_interface_descr(session, index),
             ip_addr=addr,
@@ -132,9 +128,7 @@ class SNMPClient(Client):
 
     @staticmethod
     def _get_networks(session: Session) -> List[str]:
-        return list(
-            map(lambda entry: str(entry.value), session.walk(ROUTE_NETWORK_OID))
-        )
+        return list(map(lambda entry: str(entry.value), session.walk(ROUTE_NETWORK_OID)))
 
     @staticmethod
     def _get_route_from_network(session: Session, network: str) -> RoutePrimitives:
@@ -143,7 +137,7 @@ class SNMPClient(Client):
             network=network,
             mask=mask,
             next_hop=SNMPClient._get_route_next_hop(session, network, mask),
-            route_type='3',
+            route_type=SNMPClient._get_route_type(session, network, mask),
         )
 
     @staticmethod
@@ -158,22 +152,21 @@ class SNMPClient(Client):
         return str(result[0].value)
 
     @staticmethod
-    def _get_route_type(session: Session, network: str) -> str:
-        return str(session.get(ROUTE_TYPE_OID + "." + network).value)
+    def _get_route_type(session: Session, network: str, mask: str) -> str:
+        return str(session.walk(ROUTE_TYPE_OID + "." + network + "." + mask)[0].value)
 
     @staticmethod
     def _get_ospf_id(session: Session) -> str:
-        result = session.walk(".1.3.6.1.2.1.14.1.1")
+        result = session.walk(OSPF_ID_OID)
         if len(result) != 1:
             raise OSPFIdNotAvailableException()
         return result[0].value
 
     @staticmethod
     def _get_ospf_neighbors(session: Session) -> List[str]:
-        queso = list(
+        return list(
             map(
                 lambda neighbor: neighbor.value,
                 session.walk(OSPF_BEIGHBORS_OID),
             )
         )
-        return queso
