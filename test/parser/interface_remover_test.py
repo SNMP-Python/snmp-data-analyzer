@@ -1,4 +1,4 @@
-from parser.InterfaceRemover import InterfaceRemover
+from parser.interface_remover import InterfaceRemover
 from parser.value_objects.interface.status import InterfaceStatus
 from parser.value_objects.interface.type import InterfaceType
 from test.shared.interface_mothers import InterfaceMother
