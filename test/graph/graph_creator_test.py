@@ -24,8 +24,11 @@ def test_graph_creator_two_routers_cycled_output_expected_graph():
     first_router, second_router = RouterMother.get_two_routers_in_cycle()
     graph_creator = GraphCreatorImp([first_router, second_router])
     first_router_node = RouterNode(router=first_router)
-    second_router_node = RouterNode(router=second_router, adjacents=[first_router_node])
+    second_router_node = RouterNode(router=second_router)
+
     first_router_node.add_adjacent(second_router_node)
+
+    second_router_node.add_adjacent(first_router_node)
 
     expected_graph = frozenset({first_router_node, second_router_node})
     actual_graph = graph_creator.get_graph()
@@ -38,8 +41,13 @@ def test_graph_creator_three_routers_without_cycle_output_expected_graph():
     graph_creator = GraphCreatorImp([first_router, second_router, third_router])
     first_router_node = RouterNode(router=first_router)
     third_router_node = RouterNode(router=third_router)
-    second_router_node = RouterNode(router=second_router, adjacents=[first_router_node, third_router_node])
+    second_router_node = RouterNode(router=second_router)
+
     first_router_node.add_adjacent(second_router_node)
+
+    second_router_node.add_adjacent(first_router_node)
+    second_router_node.add_adjacent(third_router_node)
+
     third_router_node.add_adjacent(second_router_node)
 
     expected_graph = frozenset({first_router_node, second_router_node, third_router_node})
@@ -52,11 +60,17 @@ def test_graph_creator_three_routers_cycled_output_expected_graph():
     first_router, second_router, third_router = RouterMother.get_three_routers_in_cycle()
     graph_creator = GraphCreatorImp([first_router, second_router, third_router])
     first_router_node = RouterNode(router=first_router)
-    second_router_node = RouterNode(router=second_router, adjacents=[first_router_node])
-    third_router_node = RouterNode(router=third_router, adjacents=[first_router_node, second_router_node])
+    second_router_node = RouterNode(router=second_router)
+    third_router_node = RouterNode(router=third_router)
+
     first_router_node.add_adjacent(second_router_node)
     first_router_node.add_adjacent(third_router_node)
+
+    second_router_node.add_adjacent(first_router_node)
     second_router_node.add_adjacent(third_router_node)
+
+    third_router_node.add_adjacent(first_router_node)
+    third_router_node.add_adjacent(second_router_node)
 
     expected_graph = frozenset({first_router_node, second_router_node, third_router_node})
     actual_graph = graph_creator.get_graph()
