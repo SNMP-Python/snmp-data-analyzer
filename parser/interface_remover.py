@@ -19,8 +19,5 @@ class InterfaceRemover:
     @staticmethod
     def _remove_interfaces(filter_strategy: Callable[[Interface], bool], routers):
         for router in routers:
-            new_interfaces: List[Interface] = []
-            for interface in router.interfaces:
-                if filter_strategy(interface):
-                    new_interfaces.append(interface)
+            new_interfaces: List[Interface] = [interface for interface in router.interfaces if filter_strategy(interface)]
             router.interfaces = new_interfaces
