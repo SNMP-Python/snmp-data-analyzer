@@ -1,3 +1,4 @@
+import sys
 from typing import FrozenSet, List
 
 from parser.exceptions.empty_interface_name import EmptyInterfaceNameException
@@ -32,29 +33,29 @@ class RouterParserFacade(RouterParser):
             self.printer.print_routers(frozenset(routers))
             return routers
         except EmptyInterfaceNameException as error:
-            return self._show_error_and_exit(f"Parser found an interface which had an invalid name: {error}")
+            self._show_error_and_exit(f"Parser found an interface which had an invalid name: {error}")
         except SpeedValueException as error:
-            return self._show_error_and_exit(f"Parser found an invalid speed: {error}")
+            self._show_error_and_exit(f"Parser found an invalid speed: {error}")
         except EmptySysNameException as error:
-            return self._show_error_and_exit(f"Parser found an invalid sys name: {error}")
+            self._show_error_and_exit(f"Parser found an invalid sys name: {error}")
         except InvalidIpException as error:
-            return self._show_error_and_exit(f"Parser found an invalid ip: {error}")
+            self._show_error_and_exit(f"Parser found an invalid ip: {error}")
         except InvalidMaskException as error:
-            return self._show_error_and_exit(f"Parser found an invalid mask: {error}")
+            self._show_error_and_exit(f"Parser found an invalid mask: {error}")
         except StatusValueException as error:
-            return self._show_error_and_exit(f"Parser found an invalid interface status: {error}")
+            self._show_error_and_exit(f"Parser found an invalid interface status: {error}")
         except InterfaceTypeException as error:
-            return self._show_error_and_exit(f"Parser found an invalid interface type: {error}")
+            self._show_error_and_exit(f"Parser found an invalid interface type: {error}")
         except RouteTypeException as error:
-            return self._show_error_and_exit(f"Parser found an invalid route type: {error}")
-        except Exception as error:
-            return self._show_error_and_exit(f"Parser implementation error: {error}")
+            self._show_error_and_exit(f"Parser found an invalid route type: {error}")
+        except Exception as error:  # pylint: disable=W0703
+            self._show_error_and_exit(f"Parser implementation error: {error}")
+        return []
 
-    def _show_error_and_exit(self, message: str) -> List[Router]:
+    def _show_error_and_exit(self, message: str) -> None:
         """
         After this function is called, the python process will be killed.
         The return type is necessary for mypy (python type checking)
         """
         self.logger.error(message)
-        exit(-1)
-        return []
+        sys.exit(-1)

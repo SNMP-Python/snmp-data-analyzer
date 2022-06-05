@@ -36,28 +36,21 @@ class RouterSearcherFacade(RouterSearcher):
         # The return type is necessary for mypy (python type checking)
         except InvalidIpException as error:
             self._show_error_and_exit(f"Searcher found an invalid ip: {error}")
-            return frozenset()
         except InvalidMaskException as error:
             self._show_error_and_exit(f"Searcher found an invalid mask: {error}")
-            return frozenset()
         except RouteCreationException as error:
             self._show_error_and_exit(f"Searcher got an error when executing add route: {error}")
-            return frozenset()
         except MaskNotFoundException as error:
             self._show_error_and_exit(f"Searcher got an error when looking for mask: {error}")
-            return frozenset()
         except NextHopNotFoundException as error:
             self._show_error_and_exit(f"Searcher got an error when looking for next hop: {error}")
-            return frozenset()
         except NonReachableHostException as error:
             self._show_error_and_exit(f"Searcher couldn't find host: {error}")
-            return frozenset()
         except OSPFIdNotAvailableException as error:
             self._show_error_and_exit(f"Searcher got an error when looking for OSPF ID: {error}")
-            return frozenset()
         except Exception as error:  # pylint: disable=W0703
             self._show_error_and_exit(f"Searcher implementation error: {error}")
-            return frozenset()
+        return frozenset()
 
     def _show_error_and_exit(self, message: str) -> None:
         self.logger.error(message)
