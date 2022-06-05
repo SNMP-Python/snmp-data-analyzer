@@ -19,6 +19,10 @@ sudo cp snmptrapd.conf /etc/snmp
 cd /etc/snmp
 sudo mkdir scripts
 ```
+#### Change trapsh.sh echo path inside the script
+```shell
+echo "" >> /home/youruser/logs.txt
+```
 #### Put trapsh.sh script into /etc/snmp/scripts 
 ```shell
 cd traps
@@ -27,5 +31,11 @@ sudo cp trapsh.sh /etc/snmp/scripts
 #### Run snmpd and snmpdtrap services
 ```shell
 systemctl start snmpd
-systemctl start snmpdtrap
+systemctl start snmptrapd
 ```
+#### Run the script  trapsparser.py located inside /traps
+#### With logs.txt in the same folder
+```shell
+python3 traps_parser.py
+```
+#### Check the output and see all traps info 🦆
