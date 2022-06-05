@@ -2,17 +2,20 @@ from __future__ import absolute_import
 
 from typing import FrozenSet, Set, List
 
+from parser.ip_objects_converter import IPParser
 from searcher.client import Client
+from searcher.primitives.interface_primitives import InterfacePrimitives
 from searcher.primitives.router_primitives import RouterPrimitives
+from searcher.route_creation.route_creator import RouteCreator
 from searcher.router_searcher import RouterSearcher
 from searcher.snmp_client import SNMPClient
 
 
 class SNMPRouterSearcher(RouterSearcher):
-
-    def __init__(self, ip_addr: str, client: Client = SNMPClient()):
+    def __init__(self, ip_addr: str, router_creator: RouteCreator, client: Client = SNMPClient()):
         self.ip_addr = ip_addr
         self.client = client
+        self.router_creator = router_creator
         self.visited_ips: Set[str] = set()
         self.ips_to_visit: List[str] = [self.ip_addr]
         self.routers: Set[RouterPrimitives] = set()
@@ -28,8 +31,24 @@ class SNMPRouterSearcher(RouterSearcher):
     def _update_ips_to_visit_and_visited(self, router: RouterPrimitives) -> None:
         for interface in router.interfaces:
             self.visited_ips.add(interface.ip_addr)
-        self.ips_to_visit.extend(self._get_ips_to_visit_from_router(router))
+        ips_to_visit = self._get_ips_to_visit_from_router(router)
+        self._add_network_gateway_to_host(ips_to_visit, router.interfaces)
+        self.ips_to_visit.extend(ips_to_visit)
 
     def _get_ips_to_visit_from_router(self, router: RouterPrimitives) -> List[str]:
-        return list(filter(lambda ip_addr: ip_addr not in self.visited_ips and ip_addr not in self.ips_to_visit,
-                           router.neighbors))
+        return list(
+            filter(
+                lambda ip_addr: ip_addr not in self.visited_ips and ip_addr not in self.ips_to_visit, router.neighbors
+            )
+        )
+
+    def _add_network_gateway_to_host(self, ips_to_visit: List[str], interfaces: List[InterfacePrimitives]):
+        try:
+            for ip_to_visit in ips_to_visit:
+                ip_addr = IPParser.get_ip_address_from(ip_to_visit)
+                for interface in interfaces:
+                    network = IPParser.get_network_from(interface.ip_addr, interface.mask)
+                    if ip_addr in network:
+                        self.router_creator.create_route_to(network=network.network, mask=network.netmask)
+        except Exception as error:
+            print("Very bad error")
