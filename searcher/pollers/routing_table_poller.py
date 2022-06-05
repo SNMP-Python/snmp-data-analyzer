@@ -44,7 +44,7 @@ class RoutingTablePoller(Poll):
     @staticmethod
     def _get_route_next_hop(session: Session, network: str, mask: str) -> str:
         result = session.walk(ROUTE_NEXT_HOP_OID + "." + network + "." + mask)
-        if len(result) != 1:
+        if len(result) == 0:
             raise NextHopNotFoundException()
         return str(result[0].value)
 
