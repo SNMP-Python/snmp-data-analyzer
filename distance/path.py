@@ -1,6 +1,5 @@
-from typing import List, Optional
-
 from parser.value_objects.router import Router
+from typing import List, Optional
 
 
 class Path:
@@ -9,8 +8,9 @@ class Path:
             path = []
         self.route = path
 
-    def add_router(self, router: Router) -> None:
-        self.route.append(router)
+    def add_router(self, router: Optional[Router]) -> None:
+        if router is not None:
+            self.route.append(router)
 
     def get_path(self) -> List[Router]:
         return self.route
