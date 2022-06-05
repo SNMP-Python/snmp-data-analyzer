@@ -1,49 +1,59 @@
 # SNMP analyzer tool 🐍
 
-## Installing dependencies and environment 🌲:
+## Summary
+- [Installing the dependencies](#installing-dependencies-and-environment-for-the-snmp-analyzer-)
+- [Set Up the Trap Catcher](#set-up-the-trap-catcher-)
+- [Usage](#usage-)
+- [License](#license-)
 
-### Install git hooks for executing tests and the git commit message
+## Installing dependencies and environment for the snmp analyzer🌲:
+
+### Install the development and build dependencies 📦
 ```shell
 pip install -r requirements.txt
+```
+
+### Install the git hooks for following the development standards 🧍
+```shell
 sudo npm install -g @commitlint/{config-conventional,cli}
 pre-commit install && pre-commit autoupdate && pre-commit install --hook-type commit-msg
 ```
-### Set-up trap catcher 🥅
-#### Copy snmpd.conf file into /usr/share/snmp changing trap2sink interface for receiver interface (trap sender interface).
+## Set up the trap catcher 🥅
+### Copy snmpd.conf file into /usr/share/snmp changing trap2sink interface for receiver interface (trap sender interface).
 ```shell
 trap2sink rocom trap_sender_interface
 sudo cp snmpd.conf /usr/share/snmp
 ```
-#### Copy snmptrapd.conf file into /etc/snmp
+### Copy snmptrapd.conf file into /etc/snmp
 ```shell
 cd traps
 sudo cp snmptrapd.conf /etc/snmp
 ```
-#### Create scripts folder in /etc/snmp
+### Create scripts folder in /etc/snmp
 ```shell
 cd /etc/snmp
 sudo mkdir scripts
 ```
-#### Change trapsh.sh echo path inside the script
+### Change trapsh.sh echo path inside the script
 ```shell
 echo "" >> /home/youruser/logs.txt
 ```
-#### Put trapsh.sh script into /etc/snmp/scripts 
+### Put trapsh.sh script into /etc/snmp/scripts 
 ```shell
 cd traps
 sudo cp trapsh.sh /etc/snmp/scripts
 ```
-#### Run snmpd and snmpdtrap services
+### Run snmpd and snmpdtrap services
 ```shell
 systemctl start snmpd
 systemctl start snmptrapd
 ```
-#### Run the script  trapsparser.py located inside /traps
-#### With logs.txt in the same folder
+### Run the script  trapsparser.py located inside /traps
+### With logs.txt in the same folder
 ```shell
 python3 traps_parser.py
 ```
-#### Check the output and see all traps info 🦆
+### Check the output and see all traps info 🦆
 ```shell
 ----------------------------------------------------
 IF STATE CHANGE
@@ -61,3 +71,35 @@ ROUTER ID:  13.0.0.1
 OSPF ROUTER STATE: FULL
 ----------------------------------------------------
 ```
+
+## Usage 📕
+In this section you'll find some examples about how to use the python-snmp-analyzer tool. Be aware that you have to install
+the dependencies before you run the tool.
+
+### Execute the tool with the default values
+```shell
+python main.py
+```
+
+### Execute the tool and add directly an ip address
+```shell
+python main.py --ip 10.0.0.4
+```
+
+### Execute the tool and save the output to a file
+```shell
+python main.py --output output.txt
+```
+
+### Execute the tool and save the routes that the program discovers to your routing table
+```shell
+python main.py --add-routes
+```
+
+### Search for help
+```shell
+python main.py --help
+```
+
+## License 👮
+The project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for more information.
