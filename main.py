@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from typing import List, FrozenSet
+from typing import FrozenSet
 
 from graph.graph_creator_imp import GraphCreatorImp
 from painter.graphviz_painter import GraphVizPainter
@@ -11,7 +11,6 @@ from printer.file_logger import FileLogger
 from printer.logger import Logger
 from printer.printer import Printer
 from printer.printer_imp import PrinterImp
-from printer.stdout_logger import StdoutLogger
 from searcher.primitives.router_primitives import RouterPrimitives
 from searcher.router_searcher import RouterSearcher
 from searcher.snmp_router_searcher import SNMPRouterSearcher

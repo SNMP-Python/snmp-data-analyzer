@@ -1,5 +1,6 @@
-from typing import Dict, List, FrozenSet
+from __future__ import absolute_import
 
+from typing import Dict, List, FrozenSet
 from distance.points import Points
 from parser.value_objects.interface.interface import Interface
 from parser.value_objects.router import Router
@@ -36,7 +37,7 @@ class PrinterImp(Printer):
     # methods for printing the router primitive values:
 
     def _print_primitive_interfaces(self, interfaces: List[InterfacePrimitives]):
-        self.logger.normal(f"\tInterfaces:")
+        self.logger.normal("\tInterfaces:")
         for interface in interfaces:
             self.logger.normal(f"\t\tName: {interface.interface}")
             self.logger.normal(f"\t\t\tIp: {interface.ip_addr}")
@@ -85,12 +86,15 @@ class PrinterImp(Printer):
     def _print_init_table(self, type_length=5):
         self.logger.normal("\tRouting Table:")
         self._print_separator_table(type_length=type_length)
+        # pylint: disable=C0301
         self.logger.normal(
-            f"\t\t|{'{:<15}'.format('Network:')}|{'{:<15}'.format('Mask:')}|{'{:<15}'.format('Next hop:')}|{('{:<' + str(type_length) + '}').format('Type:')}|"
+            f"\t\t|{'{:<15}'.format('Network:')}|{'{:<15}'.format('Mask:')}|{'{:<15}'.format('Next hop:')}|{('{:<' + str(type_length) + '}').format('Type:')}| "
         )
         self._print_separator_table(type_length=type_length)
 
+    # pylint: disable=R0913
     def _print_table_row(self, network: str, mask: str, hop: str, type: str, type_length=5):
+        # pylint: disable=C0301
         self.logger.normal(
             f"\t\t|{'{:<15}'.format(network)}|{'{:<15}'.format(mask)}|{'{:<15}'.format(hop)}|{('{:<' + str(type_length) + '}').format(type)}|"
         )
