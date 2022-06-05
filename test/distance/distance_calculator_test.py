@@ -1,6 +1,6 @@
 from netaddr import IPAddress, IPNetwork
 
-from distance.distance_calculator_imp import DistanceCalculatorImp
+from distance.distance_calculator_imp import DistanceCalculatorImp, _discard_point
 from distance.path import Path
 from test.distance.mothers.graph_mothers.one_router_graph_mother import OneRouterGraphMother
 from test.distance.mothers.graph_mothers.three_routers_graph_mother import ThreeRoutersGraphMother
@@ -13,6 +13,16 @@ def test_bitwise_and():
     network = IPNetwork('12.0.0.2/24')
     expected = IPAddress('12.0.0.0')
     assert network.network & network.netmask == expected
+
+
+def test_should_discard_points():
+    same_source_destination = GraphPointMother.get_point_for_graph('6.0.0.6', '6.0.0.6')
+    assert _discard_point(same_source_destination)
+
+
+def test_should_not_discard_points():
+    not_same_source_destination = GraphPointMother.get_point_for_graph('6.0.0.6', '4.0.0.28')
+    assert not _discard_point(not_same_source_destination)
 
 
 def test_one_router_one_interface_outputs_empty_dict():

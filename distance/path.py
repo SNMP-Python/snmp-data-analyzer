@@ -7,27 +7,27 @@ class Path:
     def __init__(self, path: Optional[List[Router]] = None):
         if path is None:
             path = []
-        self.path = path
+        self.route = path
 
     def add_router(self, router: Router) -> None:
-        self.path.append(router)
+        self.route.append(router)
 
     def get_path(self) -> List[Router]:
-        return self.path
+        return self.route
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Path):
             return NotImplemented
-        other_reverse = list(reversed(other.path.copy()))
-        return self.path == other.path or self.path == other_reverse
+        other_reverse = list(reversed(other.route.copy()))
+        return self.route == other.route or self.route == other_reverse
 
     def __repr__(self) -> str:
         return str(self)
 
     def __str__(self) -> str:
-        return str([router.sys_name.name for router in self.path])
+        return str([router.sys_name.name for router in self.route])
 
     def __lt__(self, other):
         if not isinstance(other, Path):
             return NotImplemented
-        return len(self.path) < len(other.path)
+        return len(self.route) < len(other.route)

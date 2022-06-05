@@ -1,12 +1,21 @@
-from typing import Dict, FrozenSet, List, Optional
+from typing import Dict, FrozenSet, Optional
 
-from netaddr import IPAddress, IPNetwork
+from netaddr import IPAddress
 
 from distance.distance_calculator import DistanceCalculator
 from distance.path import Path
 from distance.points import Points
 from graph.router_node import RouterNode
 from parser.value_objects.router import Router
+
+
+def _discard_point(point: Points) -> bool:
+    """
+    Determines whether a point should be discarded because it has the same source and destination or not.
+    :param point: Point to be determine if it should be discarded or not
+    :return: True if the point should be discarded, False otherwise
+    """
+    return point.source == point.destination
 
 
 class DistanceCalculatorImp(DistanceCalculator):
@@ -33,22 +42,13 @@ class DistanceCalculatorImp(DistanceCalculator):
         """
         for router_node, interface, destination in self._get_interfaces_with_destination():
             point = Points(interface.network.ip, destination)
-            if self._discard_point(point):
+            if _discard_point(point):
                 continue
             path = self._get_distance_for_point(point, router_node.router, Path())
             if self.distances.get(point) is None or self.distances[point] > path:
                 self.distances[point] = path
 
         return self.distances
-
-    @staticmethod
-    def _discard_point(point: Points) -> bool:  # TODO: Test method
-        """
-        Determines whether a point should be discarded or not.
-        :param point: Point to be determine if it should be discarded or not
-        :return: True if the point should be discarded, False otherwise
-        """
-        return point.source == point.destination
 
     def _get_interfaces_with_destination(self):
         """
