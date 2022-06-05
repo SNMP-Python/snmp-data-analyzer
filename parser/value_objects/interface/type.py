@@ -1,5 +1,7 @@
 from enum import Enum
 
+from parser.exceptions.interface_type import InterfaceTypeException
+
 
 class InterfaceType(Enum):
     NORMAL = 0
@@ -13,4 +15,4 @@ class InterfaceType(Enum):
                 return InterfaceType.LOOPBACK
             return InterfaceType.NORMAL
         except Exception as error:
-            raise ValueError("Interface type has to be a number") from error
+            raise InterfaceTypeException("Interface type has to be a number") from error

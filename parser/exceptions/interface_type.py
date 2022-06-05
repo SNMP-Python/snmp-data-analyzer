@@ -1,0 +1,2 @@
+class InterfaceTypeException(Exception):
+    pass

@@ -1,5 +1,7 @@
 from enum import Enum
 
+from parser.exceptions.route_type import RouteTypeException
+
 
 class RouteType(Enum):
     OTHER = 1
@@ -14,6 +16,6 @@ class RouteType(Enum):
             for route in RouteType:
                 if route.value == value_int:
                     return route
-            raise ValueError(f"Not found a Route Type with value: {value_int}")
+            raise RouteTypeException(f"Not found a Route Type with value: {value_int}")
         except Exception as error:
-            raise ValueError("Value has to be an integer") from error
+            raise RouteTypeException("Value has to be an integer") from error

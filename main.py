@@ -3,9 +3,11 @@ from __future__ import absolute_import
 from typing import FrozenSet
 
 from graph.graph_creator_imp import GraphCreatorImp
+from graph.router_node import RouterNode
 from painter.graphviz_painter import GraphVizPainter
 from parser.interface_remover import InterfaceRemover
 from parser.router_parser import RouterParser
+from parser.router_parser_facade import RouterParserFacade
 from parser.router_parser_imp import RouterParserImp
 from printer.file_logger import FileLogger
 from printer.logger import Logger
@@ -23,11 +25,9 @@ def main():
     searcher: RouterSearcher = SNMPRouterSearcher(ip_addr=ip_addr)
     primitives: FrozenSet[RouterPrimitives] = searcher.get_router_primitives()
     printer.print_primitives(primitives)
-    parser: RouterParser = RouterParserImp(primitives=primitives)
-    list_routers = parser.get_routers()
-    printer.print_routers(frozenset(list_routers))
+    list_routers = RouterParserFacade(printer=printer, logger=logger, routers_primitives=primitives).get_routers()
     InterfaceRemover.remove_down_and_loopback(list_routers, logger=logger)
-    graph = GraphCreatorImp(list_routers).get_graph()
+    graph: FrozenSet[RouterNode] = GraphCreatorImp(list_routers).get_graph()
     painter = GraphVizPainter(graph)
     painter.paint()
 
