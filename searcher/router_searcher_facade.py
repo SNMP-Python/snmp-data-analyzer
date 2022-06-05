@@ -39,7 +39,7 @@ class RouterSearcherFacade(RouterSearcher):
         except RouteCreationException as error:
             self._show_error_and_exit(f"Searcher got an error when executing add route: {error}")
             return frozenset()
-        except Exception as error:
+        except Exception as error:  # pylint: disable=W0703
             self._show_error_and_exit(f"Searcher implementation error: {error}")
             return frozenset()
 
