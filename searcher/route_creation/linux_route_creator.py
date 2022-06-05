@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import os
 from parser.ip_objects_converter import IPParser
-from searcher.route_creator.route_creator import RouteCreator
+from searcher.route_creation.route_creator import RouteCreator
 
 
 class LinuxRouterCreator(RouteCreator):

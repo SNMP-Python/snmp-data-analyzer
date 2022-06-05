@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 from printer.logger import Logger
-from searcher.route_creator.route_creator import RouteCreator
+from searcher.route_creation.route_creator import RouteCreator
 
 TAP0_ROUTE_TEMPLATE = 'sudo ip route add {network} dev {interface}'
 
