@@ -9,6 +9,11 @@ sudo npm install -g @commitlint/{config-conventional,cli}
 pre-commit install && pre-commit autoupdate && pre-commit install --hook-type commit-msg
 ```
 ### Set-up trap catcher 🥅
+#### Copy snmpd.conf file into /usr/share/snmp changing trap2sink interface for receiver interface (trap sender interface).
+```shell
+trap2sink rocom trap_sender_interface
+sudo cp snmpd.conf /usr/share/snmp
+```
 #### Copy snmptrapd.conf file into /etc/snmp
 ```shell
 cd traps
