@@ -2,8 +2,11 @@ from __future__ import absolute_import
 
 from typing import FrozenSet, Set, List
 
+from parser.exceptions.invalid_ip import InvalidIpException
+from parser.exceptions.invalid_mask import InvalidMaskException
 from parser.ip_objects_converter import IPParser
 from searcher.client import Client
+from searcher.exceptions.route_creation import RouteCreationException
 from searcher.primitives.interface_primitives import InterfacePrimitives
 from searcher.primitives.router_primitives import RouterPrimitives
 from searcher.route_creation.route_creator import RouteCreator
@@ -50,5 +53,9 @@ class SNMPRouterSearcher(RouterSearcher):
                     network = IPParser.get_network_from(interface.ip_addr, interface.mask)
                     if ip_addr in network:
                         self.router_creator.create_route_to(network=network.network, mask=network.netmask)
+        except InvalidIpException as error:
+            raise error
+        except InvalidMaskException as error:
+            raise error
         except Exception as error:
-            print("Very bad error")
+            raise RouteCreationException("Couldn't add route to device routing table because os limitations") from error
