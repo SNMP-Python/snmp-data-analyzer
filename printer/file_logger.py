@@ -3,7 +3,8 @@ from printer.logger import Logger
 
 class FileLogger(Logger):
     def __init__(self, file_name: str):
-        self.file = open(file_name, "w+")
+        with open(file_name, "w+", encoding='utf-8') as file:
+            self.file = file
 
     def normal(self, message: str) -> None:
         self.file.write(f"{message}\n")

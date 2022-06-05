@@ -1,6 +1,7 @@
 from abc import abstractmethod, ABC
-from typing import List, Dict, FrozenSet
+from typing import Dict, FrozenSet
 
+from distance.path import Path
 from distance.points import Points
 from parser.value_objects.router import Router
 from searcher.primitives.router_primitives import RouterPrimitives
@@ -16,5 +17,5 @@ class Printer(ABC):
         pass
 
     @abstractmethod
-    def print_distances(self, distances: Dict[Points, List[Router]]) -> None:
+    def print_distances(self, distances: Dict[Points, Path]) -> None:
         pass
