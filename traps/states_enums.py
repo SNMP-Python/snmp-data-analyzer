@@ -1,5 +1,8 @@
 from enum import Enum
 
+ROUTER_ID_MIB = ' SNMPv2-SMI::mib-2.14.1.1 '
+INTERFACE_ID_MIB = ' SNMPv2-SMI::mib-2.14.7.1.1 '
+
 class OSPFStatesMIB(Enum):
     DOWN = ' SNMPv2-SMI::mib-2.14.10.1.6 = 1\n'
     ATTEMPT = ' SNMPv2-SMI::mib-2.14.10.1.6 = 2\n'

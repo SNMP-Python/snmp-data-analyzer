@@ -1,3 +1,4 @@
+import states_enums
 from dictionaries import mib_type_switch, event_switch
 
 def print_div():
@@ -15,9 +16,9 @@ def get_header(events):
     return header, events
 
 def get_and_print_ids(event):
-    if event.split('=')[0] == ' SNMPv2-SMI::mib-2.14.1.1 ':
+    if event.split('=')[0] == states_enums.ROUTER_ID_MIB:
         print('ROUTER ID: ' + event.split('=')[1] )
-    if event.split('=')[0] == ' SNMPv2-SMI::mib-2.14.7.1.1 ':
+    if event.split('=')[0] == states_enums.INTERFACE_ID_MIB:
         print('INTERFACE ID: ' + event.split('=')[1] )
 
 def parse_line(line):
