@@ -8,7 +8,7 @@ pip install -r requirements.txt
 sudo npm install -g @commitlint/{config-conventional,cli}
 pre-commit install && pre-commit autoupdate && pre-commit install --hook-type commit-msg
 ```
-### Set-up trap catcher
+### Set-up trap catcher 🥅
 #### Copy snmptrapd.conf file into /etc/snmp
 ```shell
 cd traps
@@ -39,3 +39,20 @@ systemctl start snmptrapd
 python3 traps_parser.py
 ```
 #### Check the output and see all traps info 🦆
+```shell
+----------------------------------------------------
+IF STATE CHANGE
+ROUTER ID:  12.0.0.1
+INTERFACE ID:  12.0.0.1
+INTERFACE STATE: BACKUP_DESIGNATED_ROUTER
+----------------------------------------------------
+IF STATE CHANGE
+ROUTER ID:  12.0.0.1
+INTERFACE ID:  11.0.0.2
+INTERFACE STATE: BACKUP_DESIGNATED_ROUTER
+----------------------------------------------------
+NEIGHBOR STATE CHANGE
+ROUTER ID:  13.0.0.1
+OSPF ROUTER STATE: FULL
+----------------------------------------------------
+```
