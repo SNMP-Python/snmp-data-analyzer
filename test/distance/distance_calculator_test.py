@@ -1,12 +1,8 @@
-from typing import Dict, List
-
-from deepdiff import DeepDiff
 from netaddr import IPAddress, IPNetwork
 
 from distance.distance_calculator_imp import DistanceCalculatorImp
 from distance.path import Path
 from distance.points import Points
-from parser.value_objects.router import Router
 from test.distance.mothers.one_router_graph_mother import OneRouterGraphMother
 from test.distance.mothers.three_routers_graph_mother import ThreeRoutersGraphMother
 from test.distance.mothers.two_routers_graph_mother import \
@@ -89,13 +85,10 @@ def test_three_routers_one_interface_each_outputs_expected_dict():
     expected[point_62_84] = Path([first_router])
     expected[point_62_86] = Path([first_router, third_router])
     expected[point_62_108] = Path([first_router, second_router])
-    # expected[point_62_1010] = [first_router, third_router]
-    expected[point_62_1010] = Path([first_router, second_router, third_router])
+    expected[point_62_1010] = Path([first_router, third_router])
 
-    # expected[point_64_84] = [second_router, first_router]
-    expected[point_64_84] = Path([second_router, third_router, first_router])
-    # expected[point_64_86] = [second_router, third_router]
-    expected[point_64_86] = Path([second_router, first_router, third_router])
+    expected[point_64_84] = Path([second_router, first_router])
+    expected[point_64_86] = Path([second_router, third_router])
     expected[point_64_108] = Path([second_router])
     expected[point_64_1010] = Path([second_router, third_router])
 

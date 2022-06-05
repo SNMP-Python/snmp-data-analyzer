@@ -26,3 +26,8 @@ class Path:
 
     def __str__(self) -> str:
         return str([router.sys_name.name for router in self.path])
+
+    def __lt__(self, other):
+        if not isinstance(other, Path):
+            return NotImplemented
+        return len(self.path) < len(other.path)

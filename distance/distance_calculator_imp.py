@@ -1,4 +1,4 @@
-from typing import Dict, FrozenSet, List
+from typing import Dict, FrozenSet, List, Optional
 
 from netaddr import IPAddress, IPNetwork
 
@@ -35,9 +35,9 @@ class DistanceCalculatorImp(DistanceCalculator):
             point = Points(interface.network.ip, destination)
             if self._discard_point(point):
                 continue
-            if point not in self.distances:
-                self.distances[point] = Path()
-                self._get_distance_for_point(point, router_node.router)
+            path = self._get_distance_for_point(point, router_node.router, Path())
+            if self.distances.get(point) is None or self.distances[point] > path:
+                self.distances[point] = path
 
         return self.distances
 
@@ -48,9 +48,7 @@ class DistanceCalculatorImp(DistanceCalculator):
         :param point: Point to be determine if it should be discarded or not
         :return: True if the point should be discarded, False otherwise
         """
-        if point.source == point.destination:
-            return True
-        return False
+        return point.source == point.destination
 
     def _get_interfaces_with_destination(self):
         """
@@ -62,20 +60,20 @@ class DistanceCalculatorImp(DistanceCalculator):
                 for destination in self.destinations:
                     yield router_node, interface, destination
 
-    def _get_distance_for_point(self, point: Points, current_router: Router):
+    def _get_distance_for_point(self, point: Points, current_router: Router, path: Path) -> Path:
         """
         Fills the distances dict with the shortest path between the two points
         :param point: Points to fill the dict with
         """
-        self.distances[point].add_router(current_router)
+        path.add_router(current_router)
         for interface in current_router.interfaces:
-            if interface.network.ip == (point.destination or point.source):
-                return
+            if interface.network.ip == point.destination:
+                return path
         next_router = self._get_next_router(point, current_router)
-        self._get_distance_for_point(point, next_router)
+        return self._get_distance_for_point(point, next_router, path)
 
     def _get_next_router(self, point: Points, current_router: Router) -> Router:
-        next_hop = self._find_next_hop_for_destination(point, current_router)
+        next_hop = DistanceCalculatorImp._find_next_hop_for_destination(point, current_router)
         if next_hop == IPAddress('0.0.0.0'):
             return self._search_adjancent_router(point, current_router)
         router = self._find_router_for_next_hop(next_hop)
@@ -84,7 +82,7 @@ class DistanceCalculatorImp(DistanceCalculator):
     @staticmethod
     def _find_next_hop_for_destination(point: Points, current_router: Router) -> IPAddress:
         for entry in current_router.routing_table:
-            if point.destination & entry.network.netmask:
+            if (point.destination & entry.network.netmask) == entry.network.network:
                 return entry.next_hop
 
     def _search_adjancent_router(self, point: Points, current_router: Router) -> Router:
@@ -99,8 +97,9 @@ class DistanceCalculatorImp(DistanceCalculator):
             if router_node.router == router:
                 return router_node
 
-    def _find_router_for_next_hop(self, next_hop: IPNetwork) -> Router:
+    def _find_router_for_next_hop(self, next_hop: IPAddress) -> Optional[Router]:
         for router_node in self.graph:
             for interface in router_node.router.interfaces:
-                if next_hop.network == interface.network.network:
+                if next_hop == interface.network.ip:
                     return router_node.router
+        return None
