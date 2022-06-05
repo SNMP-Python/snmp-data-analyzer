@@ -24,6 +24,10 @@ jobs:
         pip install -r requirements.txt
     - name: Analysing the code with pylint
       run: |
+        pylint arg_parser
+        pylint distance
         pylint graph
-        pylint searcher
+        pylint painter
+        pylint printer
         pylint parser
+        pylint searcher

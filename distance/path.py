@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from parser.value_objects.router import Router
 from typing import List, Optional
 
@@ -19,7 +21,10 @@ class Path:
         if not isinstance(other, Path):
             return NotImplemented
         other_reverse = list(reversed(other.route.copy()))
-        return self.route == other.route or self.route == other_reverse
+        return self.route in (other.route, other_reverse)
+
+    def __hash__(self):
+        return hash(self.route)
 
     def __repr__(self) -> str:
         return str(self)
