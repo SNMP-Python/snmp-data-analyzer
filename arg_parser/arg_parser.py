@@ -1,48 +1,40 @@
 from __future__ import absolute_import
 
 from argparse import ArgumentParser
+from typing import Optional, Tuple, List
 
-from typing import Dict
+from printer.file_logger import FileLogger
+from printer.logger import Logger
+from printer.stdout_logger import StdoutLogger
+from searcher.route_creation.empty_route_creator import EmptyRouterCreator
+from searcher.route_creation.linux_route_creator import LinuxRouterCreator
+from searcher.route_creation.route_creator import RouteCreator
 
 IP_FLAG = 'ip'
 OUTPUT_FILE_FLAG = 'output'
 ADD_ROUTES_FLAG = 'add_routes'
 
 
-class ParsedArgs:
-    def __init__(self, ip_address, output_file, add_routes):
-        self.ip_address = ip_address
-        self.output_file = output_file
-        self.add_routes = add_routes
-
-    def __eq__(self, other):
-        return (
-            self.ip_address == other.ip_address
-            and self.output_file == other.output_file
-            and self.add_routes == other.add_routes
-        )
-
-    def __hash__(self):
-        return hash(self.ip_address) ^ hash(self.output_file) ^ hash(self.add_routes)
-
-
 class ArgParser:
     @staticmethod
-    def get_args(args_to_parse=None) -> ParsedArgs:
-        args = ArgParser._parse_args(args_to_parse)
-        return ParsedArgs(
-            ip_address=args[IP_FLAG], output_file=args[OUTPUT_FILE_FLAG], add_routes=args[ADD_ROUTES_FLAG]
-        )
+    def get_objects_from_args(args_to_parse: Optional[List[str]] = None) -> Tuple[str, Logger, RouteCreator]:
+        ip_address, output_file, add_routes = ArgParser._parse_args(args_to_parse)
+        while ip_address is None or ip_address.isspace():
+            ip_address = input("Please, insert ip address:")
+        logger = FileLogger(file_name=output_file) if output_file else StdoutLogger()
+        route_creator = EmptyRouterCreator(logger=logger) if not add_routes else LinuxRouterCreator()
+        return ip_address, logger, route_creator
 
     @staticmethod
-    def _parse_args(args) -> Dict[str, str]:
+    def _parse_args(args: Optional[List[str]]) -> Tuple[Optional[str], Optional[str], bool]:
         parser = ArgParser._get_parser()
-        return parser.parse_args(args=args).__dict__
+        arguments = parser.parse_args(args=args).__dict__
+        return arguments[IP_FLAG], arguments[OUTPUT_FILE_FLAG], arguments[ADD_ROUTES_FLAG]
 
     @staticmethod
     def _get_parser() -> ArgumentParser:
         parser = ArgumentParser(
-            description='A program that analyzes the network by asking routers using the ' 'snmp protocol.'
+            description='A program that analyzes the network by asking routers using the snmp protocol.'
         )
         return ArgParser._add_flags(parser)
 

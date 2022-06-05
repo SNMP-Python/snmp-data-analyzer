@@ -14,4 +14,7 @@ class EmptyRouterCreator(RouteCreator):
 
     def create_route_to(self, network: str, mask: str) -> None:
         if self.logger:
-            self.logger.debug(f'Detected network {network} with mask {mask}. Skipping route creation.')
+            self.logger.debug(
+                f'Detected network {network} with mask {mask}. Skipping route creation. '
+                + 'If you want to add the new routes to the routing table add the -a flag'
+            )
