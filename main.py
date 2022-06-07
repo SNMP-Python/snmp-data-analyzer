@@ -5,7 +5,7 @@ from typing import FrozenSet, List, Dict
 from arg_parser.arg_parser import ArgParser
 from distance.distance_calculator_imp import DistanceCalculatorImp
 from distance.path import Path
-from distance.points import Points
+from distance.point import Point
 from graph.graph_creator_imp import GraphCreatorImp
 from graph.router_node import RouterNode
 from painter.graphviz_painter import GraphVizPainter
@@ -24,11 +24,15 @@ def main(argv=None):
     # setup dependencies
     ip_addr, logger, creator = ArgParser.get_objects_from_args(argv)
     printer: Printer = PrinterImp(backend=logger)
-    searcher: RouterSearcher = RouterSearcherFacade(ip_addr=ip_addr, creator=creator, printer=printer, logger=logger)
+    searcher: RouterSearcher = RouterSearcherFacade(
+        ip_addr=ip_addr, creator=creator, printer=printer, logger=logger
+    )
 
     # get information from snmp and parse it to the domain objects
     primitives: FrozenSet[RouterPrimitives] = searcher.get_router_primitives()
-    parser: RouterParser = RouterParserFacade(printer=printer, logger=logger, routers_primitives=primitives)
+    parser: RouterParser = RouterParserFacade(
+        printer=printer, logger=logger, routers_primitives=primitives
+    )
     list_routers: List[Router] = parser.get_routers()
     InterfaceRemover.remove_down_and_loopback(list_routers, logger=logger)
 
@@ -38,7 +42,7 @@ def main(argv=None):
 
 def print_network_from_routers(list_routers: List[Router], printer: Printer):
     graph: FrozenSet[RouterNode] = GraphCreatorImp(list_routers).get_graph()
-    distances: Dict[Points, Path] = DistanceCalculatorImp(graph).get_distances()
+    distances: Dict[Point, Path] = DistanceCalculatorImp(graph).get_distances()
     printer.print_distances(distances)
     painter = GraphVizPainter(graph)
     painter.paint()
