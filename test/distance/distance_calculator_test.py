@@ -84,7 +84,6 @@ def test_two_router_one_interface_each_outputs_expected_dict():
     assert actual == expected
 
 
-#
 # def test_three_routers_one_interface_each_outputs_expected_dict():
 #     graph = ThreeRoutersGraphMother.get_three_routers_one_interface_graph()
 #     distance_calculator = DistanceCalculatorImp(graph)
@@ -119,10 +118,8 @@ def test_two_router_one_interface_each_outputs_expected_dict():
 #     expected[point_62_84] = Path([first_router])
 #     expected[point_62_86] = Path([first_router, third_router])
 #     expected[point_62_108] = Path([first_router, second_router])
-#     # expected[point_62_1010] = Path([first_router, third_router])
 #     expected[point_62_1010] = Path([first_router, second_router, third_router])
 #
-#     # expected[point_64_84] = Path([second_router, first_router])
 #     expected[point_64_84] = Path([second_router, third_router, first_router])
 #     expected[point_64_86] = Path([second_router, third_router])
 #     expected[point_64_108] = Path([second_router])
@@ -130,7 +127,6 @@ def test_two_router_one_interface_each_outputs_expected_dict():
 #
 #     expected[point_84_86] = Path([first_router, third_router])
 #     expected[point_84_108] = Path([first_router, second_router])
-#     # expected[point_84_1010] = Path([first_router, third_router])
 #     expected[point_84_1010] = Path([first_router, second_router, third_router])
 #
 #     expected[point_86_108] = Path([third_router, second_router])
