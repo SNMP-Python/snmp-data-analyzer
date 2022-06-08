@@ -1,10 +1,10 @@
 from itertools import chain
-from parser.value_objects.router import Router
-from typing import Dict, FrozenSet, List, Set
+from typing import Dict, List, Set
 
 from netaddr import IPAddress
 
 from graph.graph_creator import GraphCreator, RouterNode
+from parser.value_objects.router import Router
 
 
 class GraphCreatorImp(GraphCreator):

@@ -1,5 +1,4 @@
-from parser.value_objects.router import Router
-from typing import Dict, FrozenSet, Optional, Set, List
+from typing import Dict, Optional, Set, List
 
 from netaddr import IPAddress
 
@@ -7,6 +6,7 @@ from distance.distance_calculator import DistanceCalculator
 from distance.path import Path
 from distance.point import Point
 from graph.router_node import RouterNode
+from parser.value_objects.router import Router
 
 DIRECTLY_CONNECTED_IP_NH = IPAddress('0.0.0.0')
 
@@ -24,10 +24,11 @@ def _destination_in_router(destination: IPAddress, router: Router) -> bool:
 
 def _get_next_hop_for_destination(
     point: Point, current_router: Router
-) -> IPAddress:
+) -> Optional[IPAddress]:
     for entry in current_router.routing_table:
         if (point.destination & entry.network.netmask) == entry.network.network:
             return entry.next_hop
+    return None
 
 
 def _search_adjacent_for_ip(

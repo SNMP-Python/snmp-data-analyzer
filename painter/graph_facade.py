@@ -29,7 +29,8 @@ class GraphFacade:
     @staticmethod
     def _get_networks_for_router(router: Router) -> Iterable[Tuple[str, str]]:
         for interface in router.interfaces:
-            yield f"{str(interface.network.network)}/{str(interface.network.netmask)}", f"{str(interface.network).split('/', maxsplit=1)[0]}"
+            yield f"{str(interface.network.network)}/{str(interface.network.netmask)}", \
+                  f"{str(interface.network).split('/', maxsplit=1)[0]}"
 
     def get_edges(self) -> FrozenSet[Edge]:
         all_edges: Set[Edge] = set()

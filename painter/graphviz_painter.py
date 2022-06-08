@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from typing import FrozenSet, List
+from typing import List
 
 import graphviz
 
