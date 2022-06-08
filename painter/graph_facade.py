@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from typing import FrozenSet, Set, Iterable, Tuple
+from typing import FrozenSet, Set, Iterable, Tuple, List
 
 from graph.router_node import RouterNode
 from painter.edge import Edge
@@ -8,7 +8,7 @@ from parser.value_objects.router import Router
 
 
 class GraphFacade:
-    def __init__(self, graph: FrozenSet[RouterNode]):
+    def __init__(self, graph: List[RouterNode]):
         self.graph = graph
 
     def get_nodes_router(self) -> FrozenSet[str]:
@@ -29,8 +29,7 @@ class GraphFacade:
     @staticmethod
     def _get_networks_for_router(router: Router) -> Iterable[Tuple[str, str]]:
         for interface in router.interfaces:
-            yield f"{str(interface.network.network)}/{str(interface.network.netmask)}",\
-                  f"{str(interface.network).split('/', maxsplit=1)[0]}"
+            yield f"{str(interface.network.network)}/{str(interface.network.netmask)}", f"{str(interface.network).split('/', maxsplit=1)[0]}"
 
     def get_edges(self) -> FrozenSet[Edge]:
         all_edges: Set[Edge] = set()

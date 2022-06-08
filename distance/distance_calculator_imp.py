@@ -1,5 +1,5 @@
 from parser.value_objects.router import Router
-from typing import Dict, FrozenSet, Optional, Set
+from typing import Dict, FrozenSet, Optional, Set, List
 
 from netaddr import IPAddress
 
@@ -12,11 +12,6 @@ DIRECTLY_CONNECTED_IP_NH = IPAddress('0.0.0.0')
 
 
 def _discard_point(point: Point) -> bool:
-    """
-    Determines whether a point should be discarded because it has the same source and destination or not.
-    :param point: Point to be determine if it should be discarded or not
-    :return: True if the point should be discarded, False otherwise
-    """
     return point.source == point.destination
 
 
@@ -43,11 +38,11 @@ def _search_adjacent_for_ip(
     for adjacent in node.adjacents:
         if _destination_in_router(destination, adjacent.router):
             return adjacent.router
-    return None  # Should throw an exception: Ask Pablo
+    return None
 
 
 class DistanceCalculatorImp(DistanceCalculator):
-    def __init__(self, graph: FrozenSet[RouterNode]):
+    def __init__(self, graph: List[RouterNode]):
         self.graph = graph
         self.distances: Dict[Point, Path] = {}
         self.destinations = self._get_destinations()
@@ -94,6 +89,12 @@ class DistanceCalculatorImp(DistanceCalculator):
     def _get_distance_for_point(
         self, point: Point, current_router: Optional[Router]
     ) -> None:
+        """
+        Calculates the shortest path between two ip's.
+        :param point: Point to calculate the distance for
+        :param current_router: Router being currently calculated
+        :return: If recursive call has finished
+        """
         if current_router is None:
             return
         self.distances[point].add_router(current_router)
@@ -115,4 +116,4 @@ class DistanceCalculatorImp(DistanceCalculator):
         for node in self.graph:
             if node.router == router:
                 return node
-        return None  # Should throw an exception: Ask Pablo
+        return None

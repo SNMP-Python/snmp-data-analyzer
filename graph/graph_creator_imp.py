@@ -11,7 +11,7 @@ class GraphCreatorImp(GraphCreator):
     def __init__(self, routers: List[Router]) -> None:
         self._routers = routers
 
-    def get_graph(self) -> FrozenSet[RouterNode]:
+    def get_graph(self) -> List[RouterNode]:
         """
         Given a router list, returns a graph which represents the connection between routers
         :return: An immutable set that has RouterNodes
@@ -29,7 +29,8 @@ class GraphCreatorImp(GraphCreator):
             for adjacent in adjacent_routers:
                 router_nodes[router].add_adjacent(router_nodes[adjacent])
 
-        return frozenset(router_nodes.values())
+        # We return a list because neither set nor frozenset is ordered
+        return list(router_nodes.values())
 
     def _build_networks(self) -> Dict[IPAddress, Set[Router]]:
         """

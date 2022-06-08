@@ -41,7 +41,7 @@ def main(argv=None):
 
 
 def print_network_from_routers(list_routers: List[Router], printer: Printer):
-    graph: FrozenSet[RouterNode] = GraphCreatorImp(list_routers).get_graph()
+    graph: List[RouterNode] = GraphCreatorImp(list_routers).get_graph()
     distances: Dict[Point, Path] = DistanceCalculatorImp(graph).get_distances()
     printer.print_distances(distances)
     painter = GraphVizPainter(graph)
