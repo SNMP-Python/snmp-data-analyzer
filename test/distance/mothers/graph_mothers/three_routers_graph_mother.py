@@ -1,11 +1,13 @@
-from typing import FrozenSet
+from typing import List
 
 from graph.graph_creator_imp import GraphCreatorImp
 from graph.router_node import RouterNode
 from parser.value_objects.router import Router
 from test.distance.mothers.graph_interface_mother import GraphInterfaceMother
 from test.distance.mothers.graph_router_mother import GraphRouterMother
-from test.distance.mothers.graph_routing_entry_mother import GraphRoutingEntryMother
+from test.distance.mothers.graph_routing_entry_mother import (
+    GraphRoutingEntryMother,
+)
 
 
 class ThreeRoutersGraphMother:
@@ -18,9 +20,13 @@ class ThreeRoutersGraphMother:
         routing_table = [
             GraphRoutingEntryMother.get_routing_entry_for_graph('6.0.0.0/24'),
             GraphRoutingEntryMother.get_routing_entry_for_graph('8.0.0.0/24'),
-            GraphRoutingEntryMother.get_routing_entry_for_graph('10.0.0.0/24', '6.0.0.4'),
+            GraphRoutingEntryMother.get_routing_entry_for_graph(
+                '10.0.0.0/24', '6.0.0.4'
+            ),
         ]
-        router = GraphRouterMother.get_router_for_graph(interfaces, routing_table)
+        router = GraphRouterMother.get_router_for_graph(
+            interfaces, routing_table
+        )
         return router
 
     @classmethod
@@ -32,9 +38,13 @@ class ThreeRoutersGraphMother:
         routing_table = [
             GraphRoutingEntryMother.get_routing_entry_for_graph('6.0.0.0/24'),
             GraphRoutingEntryMother.get_routing_entry_for_graph('10.0.0.0/24'),
-            GraphRoutingEntryMother.get_routing_entry_for_graph('8.0.0.0/24', '10.0.0.10'),
+            GraphRoutingEntryMother.get_routing_entry_for_graph(
+                '8.0.0.0/24', '10.0.0.10'
+            ),
         ]
-        router = GraphRouterMother.get_router_for_graph(interfaces, routing_table, sys_name='test-router-2')
+        router = GraphRouterMother.get_router_for_graph(
+            interfaces, routing_table, sys_name='test-router-2'
+        )
         return router
 
     @classmethod
@@ -46,14 +56,33 @@ class ThreeRoutersGraphMother:
         routing_table = [
             GraphRoutingEntryMother.get_routing_entry_for_graph('8.0.0.0/24'),
             GraphRoutingEntryMother.get_routing_entry_for_graph('10.0.0.0/24'),
-            GraphRoutingEntryMother.get_routing_entry_for_graph('6.0.0.0/24', '8.0.0.4'),
+            GraphRoutingEntryMother.get_routing_entry_for_graph(
+                '6.0.0.0/24', '8.0.0.4'
+            ),
         ]
-        router = GraphRouterMother.get_router_for_graph(interfaces, routing_table, sys_name='test-router-3')
+        router = GraphRouterMother.get_router_for_graph(
+            interfaces, routing_table, sys_name='test-router-3'
+        )
         return router
 
     @classmethod
-    def get_three_routers_one_interface_graph(cls) -> FrozenSet[RouterNode]:
+    def _get_three_routers(cls) -> List[Router]:
         first_router = cls._get_first_router_third_test()
         second_router = cls._get_second_router_third_test()
         third_router = cls._get_third_router_third_test()
-        return GraphCreatorImp([first_router, second_router, third_router]).get_graph()
+        return [first_router, second_router, third_router]
+
+    @classmethod
+    def get_three_routers_one_interface_graph_ascending(
+        cls,
+    ) -> List[RouterNode]:
+        routers = cls._get_three_routers()
+        return GraphCreatorImp(routers).get_graph()
+
+    @classmethod
+    def get_three_routers_one_interface_graph_descending(
+        cls,
+    ) -> List[RouterNode]:
+        routers = cls._get_three_routers()
+        routers.reverse()
+        return GraphCreatorImp(routers).get_graph()

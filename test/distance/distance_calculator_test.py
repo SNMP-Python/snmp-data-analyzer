@@ -84,55 +84,125 @@ def test_two_router_one_interface_each_outputs_expected_dict():
     assert actual == expected
 
 
-# def test_three_routers_one_interface_each_outputs_expected_dict():
-#     graph = ThreeRoutersGraphMother.get_three_routers_one_interface_graph()
-#     distance_calculator = DistanceCalculatorImp(graph)
-#     first_router = ThreeRoutersGraphMother._get_first_router_third_test()
-#     second_router = ThreeRoutersGraphMother._get_second_router_third_test()
-#     third_router = ThreeRoutersGraphMother._get_third_router_third_test()
-#     expected = {}
-#
-#     point_62_64 = GraphPointMother.get_point_for_graph('6.0.0.2', '6.0.0.4')
-#     point_62_84 = GraphPointMother.get_point_for_graph('6.0.0.2', '8.0.0.4')
-#     point_62_86 = GraphPointMother.get_point_for_graph('6.0.0.2', '8.0.0.6')
-#     point_62_108 = GraphPointMother.get_point_for_graph('6.0.0.2', '10.0.0.8')
-#     point_62_1010 = GraphPointMother.get_point_for_graph('6.0.0.2', '10.0.0.10')
-#
-#     point_64_84 = GraphPointMother.get_point_for_graph('6.0.0.4', '8.0.0.4')
-#     point_64_86 = GraphPointMother.get_point_for_graph('6.0.0.4', '8.0.0.6')
-#     point_64_108 = GraphPointMother.get_point_for_graph('6.0.0.4', '10.0.0.8')
-#     point_64_1010 = GraphPointMother.get_point_for_graph('6.0.0.4', '10.0.0.10')
-#
-#     point_84_86 = GraphPointMother.get_point_for_graph('8.0.0.4', '8.0.0.6')
-#     point_84_108 = GraphPointMother.get_point_for_graph('8.0.0.4', '10.0.0.8')
-#     point_84_1010 = GraphPointMother.get_point_for_graph('8.0.0.4', '10.0.0.10')
-#
-#     point_86_108 = GraphPointMother.get_point_for_graph('8.0.0.6', '10.0.0.8')
-#     point_86_1010 = GraphPointMother.get_point_for_graph('8.0.0.6', '10.0.0.10')
-#
-#     point_108_1010 = GraphPointMother.get_point_for_graph(
-#         '10.0.0.8', '10.0.0.10'
-#     )
-#
-#     expected[point_62_64] = Path([first_router, second_router])
-#     expected[point_62_84] = Path([first_router])
-#     expected[point_62_86] = Path([first_router, third_router])
-#     expected[point_62_108] = Path([first_router, second_router])
-#     expected[point_62_1010] = Path([first_router, second_router, third_router])
-#
-#     expected[point_64_84] = Path([second_router, third_router, first_router])
-#     expected[point_64_86] = Path([second_router, third_router])
-#     expected[point_64_108] = Path([second_router])
-#     expected[point_64_1010] = Path([second_router, third_router])
-#
-#     expected[point_84_86] = Path([first_router, third_router])
-#     expected[point_84_108] = Path([first_router, second_router])
-#     expected[point_84_1010] = Path([first_router, second_router, third_router])
-#
-#     expected[point_86_108] = Path([third_router, second_router])
-#     expected[point_86_1010] = Path([third_router])
-#
-#     expected[point_108_1010] = Path([second_router, third_router])
-#
-#     actual = distance_calculator.get_distances()
-#     assert actual == expected
+def test_three_routers_one_interface_ascending_each_outputs_expected_dict():
+    graph = (
+        ThreeRoutersGraphMother.get_three_routers_one_interface_graph_ascending()
+    )
+    distance_calculator = DistanceCalculatorImp(graph)
+    first_router = ThreeRoutersGraphMother._get_first_router_third_test()
+    second_router = ThreeRoutersGraphMother._get_second_router_third_test()
+    third_router = ThreeRoutersGraphMother._get_third_router_third_test()
+    expected = {}
+
+    point_62_64 = GraphPointMother.get_point_for_graph('6.0.0.2', '6.0.0.4')
+    point_62_84 = GraphPointMother.get_point_for_graph('6.0.0.2', '8.0.0.4')
+    point_62_86 = GraphPointMother.get_point_for_graph('6.0.0.2', '8.0.0.6')
+    point_62_108 = GraphPointMother.get_point_for_graph('6.0.0.2', '10.0.0.8')
+    point_62_1010 = GraphPointMother.get_point_for_graph('6.0.0.2', '10.0.0.10')
+
+    point_64_84 = GraphPointMother.get_point_for_graph('6.0.0.4', '8.0.0.4')
+    point_64_86 = GraphPointMother.get_point_for_graph('6.0.0.4', '8.0.0.6')
+    point_64_108 = GraphPointMother.get_point_for_graph('6.0.0.4', '10.0.0.8')
+    point_64_1010 = GraphPointMother.get_point_for_graph('6.0.0.4', '10.0.0.10')
+
+    point_84_86 = GraphPointMother.get_point_for_graph('8.0.0.4', '8.0.0.6')
+    point_84_108 = GraphPointMother.get_point_for_graph('8.0.0.4', '10.0.0.8')
+    point_84_1010 = GraphPointMother.get_point_for_graph('8.0.0.4', '10.0.0.10')
+
+    point_86_108 = GraphPointMother.get_point_for_graph('8.0.0.6', '10.0.0.8')
+    point_86_1010 = GraphPointMother.get_point_for_graph('8.0.0.6', '10.0.0.10')
+
+    point_108_1010 = GraphPointMother.get_point_for_graph(
+        '10.0.0.8', '10.0.0.10'
+    )
+
+    expected[point_62_64] = Path([first_router, second_router])
+    expected[point_62_84] = Path([first_router])
+    expected[point_62_86] = Path([first_router, third_router])
+    expected[point_62_108] = Path([first_router, second_router])
+    expected[point_62_1010] = Path([first_router, second_router, third_router])
+
+    expected[point_64_84] = Path([second_router, first_router])
+    expected[point_64_86] = Path([second_router, third_router])
+    expected[point_64_108] = Path([second_router])
+    expected[point_64_1010] = Path([second_router, third_router])
+
+    expected[point_84_86] = Path([first_router, third_router])
+    expected[point_84_108] = Path([first_router, second_router])
+    expected[point_84_1010] = Path([first_router, second_router, third_router])
+
+    expected[point_86_108] = Path([third_router, second_router])
+    expected[point_86_1010] = Path([third_router])
+
+    expected[point_108_1010] = Path([second_router, third_router])
+
+    actual = distance_calculator.get_distances()
+    assert actual == expected
+
+
+def test_three_routers_one_interface_descending_each_outputs_expected_dict():
+    graph = (
+        ThreeRoutersGraphMother.get_three_routers_one_interface_graph_descending()
+    )
+    distance_calculator = DistanceCalculatorImp(graph)
+    first_router = ThreeRoutersGraphMother._get_first_router_third_test()
+    second_router = ThreeRoutersGraphMother._get_second_router_third_test()
+    third_router = ThreeRoutersGraphMother._get_third_router_third_test()
+    expected = {}
+
+    point_62_64 = GraphPointMother.get_point_for_graph('6.0.0.2', '6.0.0.4')
+    point_62_84 = GraphPointMother.get_point_for_graph('6.0.0.2', '8.0.0.4')
+    point_62_86 = GraphPointMother.get_point_for_graph('6.0.0.2', '8.0.0.6')
+    point_62_108 = GraphPointMother.get_point_for_graph('6.0.0.2', '10.0.0.8')
+    point_62_1010 = GraphPointMother.get_point_for_graph('6.0.0.2', '10.0.0.10')
+
+    point_64_84 = GraphPointMother.get_point_for_graph('6.0.0.4', '8.0.0.4')
+    point_64_86 = GraphPointMother.get_point_for_graph('6.0.0.4', '8.0.0.6')
+    point_64_108 = GraphPointMother.get_point_for_graph('6.0.0.4', '10.0.0.8')
+    point_64_1010 = GraphPointMother.get_point_for_graph('6.0.0.4', '10.0.0.10')
+
+    point_84_86 = GraphPointMother.get_point_for_graph('8.0.0.4', '8.0.0.6')
+    point_84_108 = GraphPointMother.get_point_for_graph('8.0.0.4', '10.0.0.8')
+    point_84_1010 = GraphPointMother.get_point_for_graph('8.0.0.4', '10.0.0.10')
+
+    point_86_108 = GraphPointMother.get_point_for_graph('8.0.0.6', '10.0.0.8')
+    point_86_1010 = GraphPointMother.get_point_for_graph('8.0.0.6', '10.0.0.10')
+
+    point_108_1010 = GraphPointMother.get_point_for_graph(
+        '10.0.0.8', '10.0.0.10'
+    )
+
+    expected[point_62_64] = Path([first_router, second_router])
+    expected[point_62_84] = Path([first_router])
+    expected[point_62_86] = Path([first_router, third_router])
+    expected[point_62_108] = Path([first_router, second_router])
+    expected[point_62_1010] = Path(
+        [first_router, third_router]
+    )  # This one changes
+
+    expected[point_64_84] = Path(
+        [second_router, third_router, first_router]
+    )  # This one changes
+    expected[point_64_86] = Path(
+        [second_router, first_router, third_router]
+    )  # This one changes
+    expected[point_64_108] = Path([second_router])
+    expected[point_64_1010] = Path(
+        [second_router, first_router, third_router]
+    )  # This one changes
+
+    expected[point_84_86] = Path([first_router, third_router])
+    expected[point_84_108] = Path(
+        [first_router, third_router, second_router]
+    )  # This one changes
+    expected[point_84_1010] = Path(
+        [first_router, third_router]
+    )  # This one changes
+
+    expected[point_86_108] = Path([third_router, second_router])
+    expected[point_86_1010] = Path([third_router])
+
+    expected[point_108_1010] = Path([second_router, third_router])
+
+    actual = distance_calculator.get_distances()
+    assert actual == expected
