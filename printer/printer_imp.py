@@ -40,10 +40,6 @@ class PrinterImp(Printer):
 
     def print_distances(self, distances: Dict[Point, Path]) -> None:
         self.logger.info("Showing information about distances")
-        self.logger.debug(
-            "Be aware that the paths don't have to be the same as the routing table."
-            + "See the documentation for more details"
-        )
         max_length = PrinterImp._get_max_length_of_path(distances)
         self._write_beginning_of_distances_table(max_length=max_length)
         self._print_table_elements(distances, max_length)
