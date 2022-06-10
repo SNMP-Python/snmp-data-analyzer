@@ -16,7 +16,7 @@ ROUTE_TYPE_OID = "IP-FORWARD-MIB::ipCidrRouteType"
 class RoutingTablePoller(Poll):
     def poll(self) -> List[RoutePrimitives]:
         primitives = RoutingTablePoller.poll_everything(self.session)
-        return self.get_list_route_primitives(primitives)
+        return RoutingTablePoller.get_list_route_primitives(primitives)
 
     @staticmethod
     def poll_everything(session: Session) -> Tuple[List[str], List[str], List[str], List[str]]:
@@ -26,12 +26,11 @@ class RoutingTablePoller(Poll):
         type_link = list(map(lambda x: x.value, session.walk(ROUTE_TYPE_OID)))
         return networks, masks, next_hop, type_link
 
-    def get_list_route_primitives(self, primitives: Tuple[List[str], List[str], List[str], List[str]]) -> List[RoutePrimitives]:
-        networks = primitives[0]
-        masks = primitives[1]
-        next_hops = primitives[2]
-        type_link = primitives[3]
+    @staticmethod
+    def get_list_route_primitives(primitives: Tuple[List[str], List[str], List[str], List[str]]) -> List[
+        RoutePrimitives]:
         result = []
-        for i in range(0, len(networks)):
-            result.append(RoutePrimitives(networks[i], masks[i], next_hops[i], type_link[i]))
+        for _, (network, mask, next_hop, type_link) in enumerate(
+                zip(primitives[0], primitives[1], primitives[2], primitives[3])):
+            result.append(RoutePrimitives(network, mask, next_hop, type_link))
         return result
