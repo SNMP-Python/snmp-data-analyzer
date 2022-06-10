@@ -10,7 +10,7 @@ class StdoutLogger(Logger):
     def normal(self, message: str) -> None:
         print(message)
 
-    def debug(self, message: str) -> None:
+    def _debug_impl(self, message: str) -> None:
         print(f"{DEBUG}{{debug}}{END_COLOR}: {message}")
 
     def error(self, message: str) -> None:
