@@ -14,19 +14,12 @@ from parser.router_parser import RouterParser
 from parser.router_parser_facade import RouterParserFacade
 from parser.value_objects.router import Router
 from printer.printer import Printer
-from printer.printer_imp import PrinterImp
 from searcher.primitives.router_primitives import RouterPrimitives
-from searcher.router_searcher import RouterSearcher
-from searcher.router_searcher_facade import RouterSearcherFacade
 
 
 def main(argv=None):
     # setup dependencies
-    ip_addr, logger, creator = ArgParser.get_objects_from_args(argv)
-    printer: Printer = PrinterImp(backend=logger)
-    searcher: RouterSearcher = RouterSearcherFacade(
-        ip_addr=ip_addr, creator=creator, printer=printer, logger=logger
-    )
+    searcher, logger, printer = ArgParser.get_objects_from_args(argv)
 
     # get information from snmp and parse it to the domain objects
     primitives: FrozenSet[RouterPrimitives] = searcher.get_router_primitives()

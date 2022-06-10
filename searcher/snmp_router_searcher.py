@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from typing import FrozenSet, Set, List
+from typing import FrozenSet, Set, List, Optional
 
 from parser.exceptions.invalid_ip import InvalidIpException
 from parser.exceptions.invalid_mask import InvalidMaskException
@@ -15,9 +15,10 @@ from searcher.snmp_client import SNMPClient
 
 
 class SNMPRouterSearcher(RouterSearcher):
-    def __init__(self, ip_addr: str, router_creator: RouteCreator, client: Client = SNMPClient()):
+    def __init__(self, ip_addr: str, router_creator: RouteCreator, community: Optional[str] = None,
+                 client: Optional[Client] = None):
         self.ip_addr = ip_addr
-        self.client = client
+        self.client = client if client else SNMPClient(community)
         self.router_creator = router_creator
         self.visited_ips: Set[str] = set()
         self.ips_to_visit: List[str] = [self.ip_addr]

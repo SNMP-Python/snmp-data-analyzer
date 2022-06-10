@@ -11,25 +11,28 @@ from searcher.pollers.routing_table_poller import RoutingTablePoller
 from searcher.pollers.sys_name_poller import SysNamePoller
 from searcher.primitives.router_primitives import RouterPrimitives
 
-RO_COMMUNITY = "rocom"
 SNMP_VERSION = 2
 
 
 class SNMPClient(Client):
+
+    def __init__(self, community: str):
+        self.community = community
+
     def get_router_primitives(self, ip_addr: str) -> RouterPrimitives:
         try:
-            return SNMPClient._get_primitives_from_addr(ip_addr)
+            return SNMPClient._get_primitives_from_addr(ip_addr, self.community)
         except EasySNMPTimeoutError as error:
             raise NonReachableHostException(ip_addr) from error
 
     @staticmethod
-    def _get_primitives_from_addr(ip_addr: str) -> RouterPrimitives:
-        session = SNMPClient._get_session_from_ip(ip_addr)
+    def _get_primitives_from_addr(ip_addr: str, community: str) -> RouterPrimitives:
+        session = SNMPClient._get_session_from_ip(ip_addr, community)
         return SNMPClient._get_primitives_from_session(session)
 
     @staticmethod
-    def _get_session_from_ip(ip_addr: str) -> Session:
-        return Session(hostname=ip_addr, community=RO_COMMUNITY, version=SNMP_VERSION)
+    def _get_session_from_ip(ip_addr: str, community: str) -> Session:
+        return Session(hostname=ip_addr, community=community, version=SNMP_VERSION)
 
     @staticmethod
     def _get_primitives_from_session(session: Session) -> RouterPrimitives:

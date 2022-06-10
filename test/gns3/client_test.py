@@ -9,7 +9,7 @@ from searcher.primitives.interface_primitives import InterfacePrimitives
 from searcher.primitives.route_primitives import RoutePrimitives
 from searcher.snmp_client import SNMPClient
 
-snmp_client = SNMPClient()
+snmp_client = SNMPClient(community="rocom")
 
 
 def test_non_reachable_host_throws_non_reachable_host_exception():

@@ -23,8 +23,9 @@ class RouterSearcherFacade(RouterSearcher):
     Class which adds log functionality and error handling for the class SNMPRouterSearcher
     """
 
-    def __init__(self, ip_addr: str, creator: RouteCreator, printer: Printer, logger: Logger):
-        self.searcher: RouterSearcher = SNMPRouterSearcher(ip_addr=ip_addr, router_creator=creator)
+    # pylint: disable=R0913
+    def __init__(self, ip_addr: str, creator: RouteCreator, printer: Printer, logger: Logger, community: str):
+        self.searcher: RouterSearcher = SNMPRouterSearcher(ip_addr=ip_addr, router_creator=creator, community=community)
         self.printer: Printer = printer
         self.logger: Logger = logger
 
