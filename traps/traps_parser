@@ -38,13 +38,13 @@ def parse_line(line, file_parsed):
             print_if_or_router_state(event, file_parsed)
 
 def open_parsed_file():
-    if os.path.exists('/home/oscar/logs_parsed.txt'):
-        return open('/home/oscar/logs_parsed.txt', 'a+')
+    if os.path.exists('/var/log/logs_parsed.txt'):
+        return open('/var/log/logs_parsed.txt', 'a+')
     else:
-        return open('/home/oscar/logs_parsed.txt', 'w+')
+        return open('/var/log/logs_parsed.txt', 'w+')
 
 def get_trap():
-    file = open('/home/oscar/logs.txt', 'w+')
+    file = open('/var/log/logs.txt', 'w+')
     for line in sys.stdin:
         line = line.rstrip('\n')
         file.write(line + ',')
@@ -53,7 +53,7 @@ def get_trap():
 
 if __name__ == "__main__":
     get_trap()
-    file = open('/home/oscar/logs.txt', 'r+')
+    file = open('/var/log/logs.txt', 'r+')
     file_parsed = open_parsed_file()
     for line in file:
         parse_line(line, file_parsed)
