@@ -37,15 +37,9 @@ def test_should_not_discard_points():
     assert not _discard_point(not_same_source_destination)
 
 
-def test_one_router_one_interface_outputs_empty_dict():
-    graph = OneRouterGraphMother.get_one_router_one_interface_graph()
-    distance_calculator = DistanceCalculatorImp(graph)
-    assert distance_calculator.get_distances() == {}
-
-
 def test_one_router_three_interfaces_outputs_expected_dict():
     graph = OneRouterGraphMother.get_one_router_three_interfaces_graph()
-    distance_calculator = DistanceCalculatorImp(graph)
+    distance_calculator = DistanceCalculatorImp(graph, '6.0.0.2')
     router = OneRouterGraphMother._get_one_router_three_interfaces()
     expected = {}
 
@@ -70,7 +64,7 @@ def test_one_router_three_interfaces_outputs_expected_dict():
 
 def test_two_router_one_interface_each_outputs_expected_dict():
     graph = TwoRoutersGraphMother.get_two_routers_one_interface_graph()
-    distance_calculator = DistanceCalculatorImp(graph)
+    distance_calculator = DistanceCalculatorImp(graph, '6.0.0.1')
     first_router = TwoRoutersGraphMother._get_first_router_second_test()
     second_router = TwoRoutersGraphMother._get_second_router_second_test()
 
@@ -88,7 +82,7 @@ def test_three_routers_one_interface_ascending_each_outputs_expected_dict():
     graph = (
         ThreeRoutersGraphMother.get_three_routers_one_interface_graph_ascending()
     )
-    distance_calculator = DistanceCalculatorImp(graph)
+    distance_calculator = DistanceCalculatorImp(graph, '6.0.0.2')
     first_router = ThreeRoutersGraphMother._get_first_router_third_test()
     second_router = ThreeRoutersGraphMother._get_second_router_third_test()
     third_router = ThreeRoutersGraphMother._get_third_router_third_test()
@@ -144,7 +138,7 @@ def test_three_routers_one_interface_descending_each_outputs_expected_dict():
     graph = (
         ThreeRoutersGraphMother.get_three_routers_one_interface_graph_descending()
     )
-    distance_calculator = DistanceCalculatorImp(graph)
+    distance_calculator = DistanceCalculatorImp(graph, '10.0.0.10')
     first_router = ThreeRoutersGraphMother._get_first_router_third_test()
     second_router = ThreeRoutersGraphMother._get_second_router_third_test()
     third_router = ThreeRoutersGraphMother._get_third_router_third_test()

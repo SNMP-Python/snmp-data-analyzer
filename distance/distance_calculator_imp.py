@@ -23,21 +23,26 @@ def _destination_in_router(destination: IPAddress, router: Router) -> bool:
 
 
 def _get_next_hop_for_destination(
-        point: Point, current_router: Router
+    point: Point, current_router: Router
 ) -> IPAddress:
     for entry in current_router.routing_table:
-        if entry.network != IPNetwork("0.0.0.0/0") and point.destination in entry.network:
+        if (
+            entry.network != IPNetwork("0.0.0.0/0")
+            and point.destination in entry.network
+        ):
             return entry.next_hop
-    raise Exception(f"Couldn't find point {point} on router: {current_router.sys_name}")
+    raise Exception(
+        f"Couldn't find point {point} on router: {current_router.sys_name}"
+    )
 
 
-def _search_adjacent_for_ip(
-        destination: IPAddress, node: RouterNode
-) -> Router:
+def _search_adjacent_for_ip(destination: IPAddress, node: RouterNode) -> Router:
     for adjacent in node.adjacents:
         if _destination_in_router(destination, adjacent.router):
             return adjacent.router
-    raise Exception(f"Couldn't find destination {destination} inside adjacents of {node.router.sys_name}")
+    raise Exception(
+        f"Couldn't find destination {destination} inside adjacents of {node.router.sys_name}"
+    )
 
 
 class DistanceCalculatorImp(DistanceCalculator):
@@ -58,11 +63,14 @@ class DistanceCalculatorImp(DistanceCalculator):
         return new_graph
 
     @staticmethod
-    def _get_first_router(first_hop: IPAddress, graph: List[RouterNode]) -> RouterNode:
+    def _get_first_router(
+        first_hop: IPAddress, graph: List[RouterNode]
+    ) -> RouterNode:
         for node in graph:
             for interface in node.router.interfaces:
                 if interface.network.ip == first_hop:
                     return node
+        raise Exception(f"Couldn't find first hop {first_hop} in graph")
 
     def _get_destinations(self) -> Set[IPAddress]:
         """
@@ -81,9 +89,9 @@ class DistanceCalculatorImp(DistanceCalculator):
         :return: Dict of points with the shortest paths between these two points
         """
         for (
-                router_node,
-                interface,
-                destination,
+            router_node,
+            interface,
+            destination,
         ) in self._get_interfaces_with_destination():
             point = Point(interface.network.ip, destination)
             if _discard_point(point) or point in self.distances:
@@ -104,7 +112,7 @@ class DistanceCalculatorImp(DistanceCalculator):
                     yield router_node, interface, destination
 
     def _get_distance_for_point(
-            self, point: Point, current_router: Router
+        self, point: Point, current_router: Router
     ) -> None:
         """
         Calculates the shortest path between two ip's.
@@ -115,7 +123,9 @@ class DistanceCalculatorImp(DistanceCalculator):
         self.distances[point].add_router(current_router)
         if _destination_in_router(point.destination, current_router):
             return
-        next_hop: IPAddress = _get_next_hop_for_destination(point, current_router)
+        next_hop: IPAddress = _get_next_hop_for_destination(
+            point, current_router
+        )
         current_node: RouterNode = self._get_node_for_router(current_router)
         if next_hop == DIRECTLY_CONNECTED_IP_NH:
             next_router = _search_adjacent_for_ip(
@@ -131,4 +141,6 @@ class DistanceCalculatorImp(DistanceCalculator):
         for node in self.graph:
             if node.router == router:
                 return node
-        raise Exception(f"Couldn't find router {router.sys_name} on graph. References error")
+        raise Exception(
+            f"Couldn't find router {router.sys_name} on graph. References error"
+        )
