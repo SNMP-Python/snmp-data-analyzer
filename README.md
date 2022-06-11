@@ -43,17 +43,12 @@ sudo cp traps_parser /etc/snmp/scripts
 sudo cp dictionaries.py /etc/snmp/scripts
 sudo cp states_enums.py /etc/snmp/scripts
 ```
-### Change trapsparser python file open paths to your user
-```python
-open('/home/youruser/logs.txt')
-open('/home/youruser/logs_parsed.txt')
-```
 ### Run snmpd and snmpdtrap services
 ```shell
 systemctl start snmpd
 systemctl start snmptrapd
 ```
-### Check output and see traps info 🦆
+### Check output and see traps info in /var/log/logs_parsed.txt 🦆
 ```shell
 ----------------------------------------------------
 IF STATE CHANGE
