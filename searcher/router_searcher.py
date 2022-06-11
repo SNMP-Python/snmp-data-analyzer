@@ -10,3 +10,7 @@ class RouterSearcher(ABC):
     @abstractmethod
     def get_router_primitives(self) -> FrozenSet[RouterPrimitives]:
         pass
+
+    @abstractmethod
+    def get_first_hop(self) -> str:
+        pass

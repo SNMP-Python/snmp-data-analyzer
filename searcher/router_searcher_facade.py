@@ -28,6 +28,7 @@ class RouterSearcherFacade(RouterSearcher):
         self.searcher: RouterSearcher = SNMPRouterSearcher(ip_addr=ip_addr, router_creator=creator, community=community)
         self.printer: Printer = printer
         self.logger: Logger = logger
+        self.first_hop = ip_addr
 
     def get_router_primitives(self) -> FrozenSet[RouterPrimitives]:
         try:
@@ -56,3 +57,6 @@ class RouterSearcherFacade(RouterSearcher):
     def _show_error_and_exit(self, message: str) -> None:
         self.logger.error(message)
         sys.exit(-1)
+
+    def get_first_hop(self) -> str:
+        return self.first_hop

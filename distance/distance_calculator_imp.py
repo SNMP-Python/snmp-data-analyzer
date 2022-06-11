@@ -41,10 +41,28 @@ def _search_adjacent_for_ip(
 
 
 class DistanceCalculatorImp(DistanceCalculator):
-    def __init__(self, graph: List[RouterNode]):
-        self.graph = graph
+    def __init__(self, graph: List[RouterNode], first_hop: str):
+        self.first_hop = first_hop
+        self.graph = self._sort_graph(graph.copy())
         self.distances: Dict[Point, Path] = {}
         self.destinations = self._get_destinations()
+
+    def _sort_graph(self, graph: List[RouterNode]) -> List[RouterNode]:
+        first_hop_addr = IPAddress(self.first_hop)
+        first_router = self._get_first_router(first_hop_addr, graph)
+        graph.remove(first_router)
+        new_graph = [first_router]
+        while graph:
+            current_router = graph.pop(0)
+            new_graph.append(current_router)
+        return new_graph
+
+    @staticmethod
+    def _get_first_router(first_hop: IPAddress, graph: List[RouterNode]) -> RouterNode:
+        for node in graph:
+            for interface in node.router.interfaces:
+                if interface.network.ip == first_hop:
+                    return node
 
     def _get_destinations(self) -> Set[IPAddress]:
         """

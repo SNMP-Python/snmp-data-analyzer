@@ -23,6 +23,7 @@ class SNMPRouterSearcher(RouterSearcher):
         self.visited_ips: Set[str] = set()
         self.ips_to_visit: List[str] = [self.ip_addr]
         self.routers: Set[RouterPrimitives] = set()
+        self.first_hop = ip_addr
 
     def get_router_primitives(self) -> FrozenSet[RouterPrimitives]:
         while self.ips_to_visit:
@@ -60,3 +61,6 @@ class SNMPRouterSearcher(RouterSearcher):
             raise error
         except Exception as error:
             raise RouteCreationException("Couldn't add route to device routing table because os limitations") from error
+
+    def get_first_hop(self) -> str:
+        return self.first_hop

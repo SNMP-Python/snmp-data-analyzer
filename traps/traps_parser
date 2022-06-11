@@ -5,26 +5,34 @@ import sys
 from dictionaries import mib_type_switch, event_switch
 import os.path
 
+
 def add_div(file_parsed):
     file_parsed.write('----------------------------------------------------\n')
+
 
 def print_event_type(events, file_parsed):
     file_parsed.write(mib_type_switch.get(events[0]) + '\n')
 
+
 def print_if_or_router_state(event, file_parsed):
-    if event_switch.get(event, "") == "": pass
-    else: file_parsed.write(event_switch.get(event, "") + '\n')
+    if event_switch.get(event, "") == "":
+        pass
+    else:
+        file_parsed.write(event_switch.get(event, "") + '\n')
+
 
 def get_header(events):
     header = events[0]
     events = events[3:]
     return header, events
 
+
 def get_and_print_ids(event, file_parsed):
     if event.split(' ')[0] == states_enums.ROUTER_ID_MIB:
         file_parsed.write('ROUTER ID: ' + event.split(' ')[1] + '\n')
     if event.split(' ')[0] == states_enums.INTERFACE_ID_MIB:
         file_parsed.write('INTERFACE ID: ' + event.split(' ')[1] + '\n')
+
 
 def parse_line(line, file_parsed):
     events = line.split(',')
@@ -37,11 +45,13 @@ def parse_line(line, file_parsed):
             get_and_print_ids(event, file_parsed)
             print_if_or_router_state(event, file_parsed)
 
+
 def open_parsed_file():
     if os.path.exists('/var/log/logs_parsed.txt'):
         return open('/var/log/logs_parsed.txt', 'a+')
     else:
         return open('/var/log/logs_parsed.txt', 'w+')
+
 
 def get_trap():
     file = open('/var/log/logs.txt', 'w+')
@@ -50,6 +60,7 @@ def get_trap():
         file.write(line + ',')
     file.write('\n')
     file.close()
+
 
 if __name__ == "__main__":
     get_trap()
@@ -61,6 +72,3 @@ if __name__ == "__main__":
     add_div(file_parsed)
     file.close()
     file_parsed.close()
-
-
-

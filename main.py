@@ -15,6 +15,7 @@ from parser.router_parser_facade import RouterParserFacade
 from parser.value_objects.router import Router
 from printer.printer import Printer
 from searcher.primitives.router_primitives import RouterPrimitives
+from searcher.router_searcher import RouterSearcher
 
 
 def main(argv=None):
@@ -30,12 +31,13 @@ def main(argv=None):
     InterfaceRemover.remove_down_and_loopback(list_routers, logger=logger)
 
     # print values
-    print_network_from_routers(list_routers=list_routers, printer=printer)
+    print_network_from_routers(list_routers=list_routers, printer=printer, searcher=searcher)
 
 
-def print_network_from_routers(list_routers: List[Router], printer: Printer):
+def print_network_from_routers(list_routers: List[Router], printer: Printer, searcher: RouterSearcher):
     graph: List[RouterNode] = GraphCreatorImp(list_routers).get_graph()
-    distances: Dict[Point, Path] = DistanceCalculatorImp(graph).get_distances()
+
+    distances: Dict[Point, Path] = DistanceCalculatorImp(graph, searcher.get_first_hop()).get_distances()
     printer.print_distances(distances)
     painter = GraphVizPainter(graph)
     painter.paint()
