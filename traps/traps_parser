@@ -3,32 +3,33 @@
 import states_enums
 import sys
 from dictionaries import mib_type_switch, event_switch
+import os.path
 
 def add_div(file_parsed):
-    file_parsed.write('----------------------------------------------------')
+    file_parsed.write('----------------------------------------------------\n')
 
 def print_event_type(events, file_parsed):
-    file_parsed.write(str(mib_type_switch.get(events[0])))
+    file_parsed.write(mib_type_switch.get(events[0]) + '\n')
 
 def print_if_or_router_state(event, file_parsed):
-    file_parsed.write(event_switch.get(event, ""))
+    if event_switch.get(event, "") == "": pass
+    else: file_parsed.write(event_switch.get(event, "") + '\n')
 
 def get_header(events):
-    header = events[1]
-    events = events[2:]
+    header = events[0]
+    events = events[3:]
     return header, events
 
 def get_and_print_ids(event, file_parsed):
-    if event.split('=')[0] == states_enums.ROUTER_ID_MIB:
-        file_parsed.write('ROUTER ID: ' + event.split('=')[1] )
-    if event.split('=')[0] == states_enums.INTERFACE_ID_MIB:
-        file_parsed.write('INTERFACE ID: ' + event.split('=')[1] )
+    if event.split(' ')[0] == states_enums.ROUTER_ID_MIB:
+        file_parsed.write('ROUTER ID: ' + event.split(' ')[1] + '\n')
+    if event.split(' ')[0] == states_enums.INTERFACE_ID_MIB:
+        file_parsed.write('INTERFACE ID: ' + event.split(' ')[1] + '\n')
 
 def parse_line(line, file_parsed):
-    print(line)
     events = line.split(',')
-    header, events = get_header(events)
     print(events)
+    header, events = get_header(events)
     if events:
         add_div(file_parsed)
         print_event_type(events, file_parsed)
@@ -36,21 +37,29 @@ def parse_line(line, file_parsed):
             get_and_print_ids(event, file_parsed)
             print_if_or_router_state(event, file_parsed)
 
-        print()
+def open_parsed_file():
+    if os.path.exists('/home/oscar/logs_parsed.txt'):
+        return open('/home/oscar/logs_parsed.txt', 'a+')
+    else:
+        return open('/home/oscar/logs_parsed.txt', 'w+')
 
-def get_trap(file):
+def get_trap():
+    file = open('/home/oscar/logs.txt', 'w+')
     for line in sys.stdin:
         line = line.rstrip('\n')
         file.write(line + ',')
+    file.write('\n')
+    file.close()
 
 if __name__ == "__main__":
-    file = open('/home/oscar/logs.txt', 'r')
-    file_parsed = open('/home/oscar/logs_parsed.txt', 'w+')
-    #get_trap(file)
+    get_trap()
+    file = open('/home/oscar/logs.txt', 'r+')
+    file_parsed = open_parsed_file()
     for line in file:
         parse_line(line, file_parsed)
 
     add_div(file_parsed)
+    file.close()
     file_parsed.close()
 
 
