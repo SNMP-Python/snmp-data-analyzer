@@ -48,6 +48,10 @@ sudo cp states_enums.py /etc/snmp/scripts
 systemctl start snmpd
 systemctl start snmptrapd
 ```
+### Give +x permissions to traps_parser script
+```shell
+sudo chmod +x traps_parser
+```
 ### Check output and see traps info in /var/log/logs_parsed.txt 🦆
 ```shell
 ----------------------------------------------------
