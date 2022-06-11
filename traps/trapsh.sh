@@ -11,4 +11,5 @@ do
 		vars="$vars, $oid = $val"
 	fi
 done
-echo trap: $1 $host $ip $vars >> /home/oscar/logs.txt
+echo trap: $1 $host $ip $vars >> /var/log/traps_logs.txt
+python3 traps_parser.py

@@ -24,6 +24,6 @@ mib_type_switch = {
 }
 
 interfaces_mib_switch = {
-    InterfacesMIB.ROUTER_ID.value: ' SNMPv2-SMI::mib-2.14.1.1 ',
-    InterfacesMIB.INTERFACE_IP.value: ' SNMPv2-SMI::mib-2.14.7.1.1 '
+    InterfacesMIB.ROUTER_ID.value: 'SNMPv2-SMI::mib-2.14.1.1',
+    InterfacesMIB.INTERFACE_IP.value: 'SNMPv2-SMI::mib-2.14.7.1.1'
 }
