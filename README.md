@@ -4,7 +4,7 @@
 ## Summary
 - [Installing the dependencies](#installing-dependencies-and-environment-for-the-snmp-analyzer)
 - [Set Up the Trap Catcher](#set-up-the-trap-catcher-)
-- [Usage](#usage-)
+- [Usage](#usage--1)
 - [License](#license-)
 
 ## Installing dependencies and environment for the snmp analyzer🌲:
