@@ -20,36 +20,27 @@ sudo npm install -g @commitlint/{config-conventional,cli}
 pre-commit install && pre-commit autoupdate && pre-commit install --hook-type commit-msg
 ```
 ## Set up the trap catcher 🥅
-### Copy snmpd.conf file into /usr/share/snmp changing trap2sink interface for receiver interface (trap sender interface).
-```shell
-trap2sink rocom trap_sender_interface
-sudo cp snmpd.conf /usr/share/snmp
-```
-### Copy snmptrapd.conf file into /etc/snmp
+### Copy the trap configuration and parser files
 ```shell
 cd traps
+# copy configuration files
 sudo cp snmptrapd.conf /etc/snmp
-```
-### Copy snmpd.conf file into /usr/share/snmp
-```shell
-cd traps
 sudo cp snmpd.conf /usr/share/snmp
-```
-### Create scripts folder and copy scripts in /etc/snmp/scripts
-```shell
-cd /etc/snmp/
-sudo mkdir scripts
+
+# copy parser files
+sudo mkdir /etc/snmp/scripts
 sudo cp traps_parser /etc/snmp/scripts
-sudo cp dictionaries.py /etc/snmp/scripts
-sudo cp states_enums.py /etc/snmp/scripts
+sudo cp *.py /etc/snmp/scripts
 ```
-### Run snmpd and snmpdtrap services
+
+### Start the snmpd and snmpdtrap services
 ```shell
-systemctl start snmpd
-systemctl start snmptrapd
+sudo systemctl start snmpd
+sudo systemctl start snmptrapd
 ```
-### Give +x permissions to traps_parser script
+### Give executable permissions to the traps_parser script in case it doesn't have permissions
 ```shell
+cd /etc/snmp/scripts
 sudo chmod +x traps_parser
 ```
 ### Check output and see traps info in /var/log/logs_parsed.txt 🦆
